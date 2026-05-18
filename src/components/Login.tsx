@@ -21,12 +21,12 @@ export default function Login({ onLogin, onBack }: LoginProps) {
 
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password
       });
 
       if (authError) {
-        setErrorMsg('E-mail ou senha incorretos');
+        setErrorMsg(authError.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos' : authError.message);
         setIsLoading(false);
         return;
       }
