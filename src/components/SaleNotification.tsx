@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Product } from '../types';
 import { ShoppingBag } from 'lucide-react';
+import { userStorage } from '../lib/storage';
 
 interface SaleNotificationProps {
   product: Product | null;
@@ -12,7 +13,7 @@ export default function SaleNotification({ product, onClose }: SaleNotificationP
   const lastPlayedId = useRef<number | null>(null);
 
   const isAdmin = localStorage.getItem('shopspy_is_admin') === 'true';
-  const notificationsEnabled = localStorage.getItem('shopspy_notifications_enabled') === 'true';
+  const notificationsEnabled = localStorage.getItem('shopspy_notifications_enabled') !== 'false';
 
   if (!isAdmin || !notificationsEnabled) return null; // Não renderizar nada
 
@@ -27,18 +28,20 @@ export default function SaleNotification({ product, onClose }: SaleNotificationP
     }
 
     const adminCheck = localStorage.getItem('shopspy_is_admin') === 'true';
-    const enabledCheck = localStorage.getItem('shopspy_notifications_enabled') === 'true';
+    const enabledCheck = localStorage.getItem('shopspy_notifications_enabled') !== 'false';
     if (!adminCheck || !enabledCheck) return;
 
     // Play sound logic - only if it's a new product
     if (lastPlayedId.current !== product.id) {
       const playNotificationSound = () => {
-        const soundName = localStorage.getItem('shopspy_notification_sound') || 'Caixa registradora';
+        const soundName = userStorage.get('notification_sound') || 'Caixa registradora';
+        const isCustomClick = soundName === 'Personalizado';
+        
         if (soundName === 'Silencioso') return;
 
         // Se for personalizado, tocar o base64 salvo
-        if (soundName === 'Personalizado') {
-          const base64 = localStorage.getItem('shopspy_custom_sound');
+        if (isCustomClick) {
+          const base64 = userStorage.get('custom_sound');
           if (base64) {
             const audio = new Audio(base64);
             audio.volume = 0.4;

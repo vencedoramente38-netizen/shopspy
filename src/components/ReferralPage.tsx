@@ -132,13 +132,6 @@ export default function ReferralPage() {
                 </div>
                 <span className="text-[12px] text-black/40 dark:text-white/40 mt-1">por mês</span>
                 
-                <button 
-                  onClick={() => copyPriceLink("https://pay.kirvano.com/bc854d76-be26-4d03-bfe3-b6f90ae41b26", "link97")}
-                  className={`mt-4 flex items-center justify-center gap-2 w-full py-2 rounded-lg border text-[12px] font-bold transition-all ${copiedLink === 'link97' ? 'bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]' : 'bg-white dark:bg-[#D0011B]/15 border-[#D0011B]/30 text-[#D0011B] hover:bg-[#D0011B]/20'}`}
-                >
-                  {copiedLink === 'link97' ? <CheckCircle2 size={14} /> : <Copy size={13} />}
-                  {copiedLink === 'link97' ? 'Copiado!' : 'Copiar Link R$ 97'}
-                </button>
               </div>
 
               {/* Card Vitalício */}
@@ -153,13 +146,6 @@ export default function ReferralPage() {
                 </div>
                 <span className="text-[12px] text-black/40 dark:text-white/40 mt-1">ou R$ 147 à vista</span>
 
-                <button 
-                  onClick={() => copyPriceLink("https://pay.kirvano.com/2055318e-dc79-4869-8eb1-68b39d1d64ea", "link147")}
-                  className={`mt-4 flex items-center justify-center gap-2 w-full py-2 rounded-lg border text-[12px] font-bold transition-all ${copiedLink === 'link147' ? 'bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]' : 'bg-white dark:bg-[#22C55E]/15 border-[#22C55E]/30 text-[#22C55E] hover:bg-[#22C55E]/20'}`}
-                >
-                  {copiedLink === 'link147' ? <CheckCircle2 size={14} /> : <Copy size={13} />}
-                  {copiedLink === 'link147' ? 'Copiado!' : 'Copiar Link R$ 147'}
-                </button>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Star, BarChart2, Heart, TrendingUp } from 'lucide-react';
+import { Star, BarChart2, Heart, TrendingUp, Flame, ExternalLink, Users } from 'lucide-react';
 import { Product } from '../types';
+import { userStorage } from '../lib/storage';
 
 interface ProductCardProps {
   key?: React.Key;
@@ -12,27 +13,31 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onAnalyze, onAffiliate, onNotification }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const shortName = product.nome.length > 20 ? `${product.nome.substring(0, 20)}...` : product.nome;
 
   useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem('shopspy_favorites') || '[]');
+    const favorites = JSON.parse(userStorage.get('favorites') || '[]');
     setIsFavorite(favorites.includes(product.id));
   }, [product.id]);
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const favorites = JSON.parse(localStorage.getItem('shopspy_favorites') || '[]');
+    const favorites = JSON.parse(userStorage.get('favorites') || '[]');
     let newFavorites;
     
     if (isFavorite) {
       newFavorites = favorites.filter((id: number) => id !== product.id);
-      onNotification('Removido dos favoritos');
+      setIsFavorite(false);
+      onNotification(`"${shortName}" removido dos favoritos`);
     } else {
       newFavorites = [...favorites, product.id];
-      onNotification('❤️ Adicionado aos favoritos');
+      setIsFavorite(true);
+      onNotification(`"${shortName}" salvo nos favoritos`);
     }
     
-    localStorage.setItem('shopspy_favorites', JSON.stringify(newFavorites));
-    setIsFavorite(!isFavorite);
+    userStorage.set('favorites', JSON.stringify(newFavorites));
+    
+    window.dispatchEvent(new Event('shopspy_favorites_updated'));
   };
 
   return (
@@ -50,38 +55,33 @@ export default function ProductCard({ product, onAnalyze, onAffiliate, onNotific
         />
         
         {/* Badge TOP #N */}
-        <div className="absolute top-2 left-2 px-2 py-1 bg-black/75 text-white text-[11px] font-bold rounded-[6px] z-10 shadow-sm">
+        <div className="absolute top-2 left-2 px-2 py-1 bg-black/80 text-white text-[11px] font-bold rounded-[6px] z-10 shadow-sm flex items-center gap-1">
           TOP #{product.ranking}
         </div>
 
         {/* Badge CATEGORIA */}
-        <div className="absolute top-2 right-2 px-2 py-1 bg-black/75 text-white text-[10px] font-semibold rounded-[6px] z-10 shadow-sm">
+        <div className="absolute top-2 right-2 px-2 py-1 bg-black/80 text-white text-[10px] font-semibold rounded-[6px] z-10 shadow-sm">
           {product.categoria}
         </div>
 
         {/* Favorite Button */}
         <button 
           onClick={toggleFavorite}
-          className="absolute top-9 right-2 w-[32px] h-[32px] rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 z-[2] bg-white/70 dark:bg-black/40 backdrop-blur-sm border border-black/5 dark:border-white/10 hover:bg-white/90 dark:hover:bg-black/60 shadow-sm"
+          className="absolute top-9 right-2 w-[32px] h-[32px] rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 z-[2] bg-black/40 backdrop-blur-sm border border-white/10 hover:bg-black/60 shadow-sm"
         >
           <Heart 
             size={16} 
-            className={`transition-colors duration-200 ${isFavorite ? 'text-[#D0011B] fill-[#D0011B]' : 'text-gray-600 dark:text-white'}`} 
+            className={`transition-colors duration-200 ${isFavorite ? 'text-white fill-white' : 'text-white'}`} 
           />
         </button>
-        
-        {/* Badge Alta Demanda */}
-        <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-[#D0011B] text-white text-[10px] font-bold rounded-[20px] flex items-center gap-1 shadow-md">
-          <TrendingUp size={10} />
-          Alta Demanda
-        </div>
 
-        {/* Overlay ao Hover */}
-        <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <div className="px-6 py-2.5 bg-[#D0011B] text-white rounded-full text-[13px] font-bold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-lg">
-            Analisar Produto
+        {/* Badge Hot */}
+        {[10, 21, 26].includes(product.id) && (
+          <div className="absolute bottom-3 left-3 px-2.5 py-1.5 bg-[#D0011B] text-white text-[10px] font-bold rounded-[20px] shadow-md flex items-center gap-1.5 z-10">
+            <Flame size={12} fill="currentColor" />
+            {product.desconto ? `HOT -${product.desconto}` : 'HOT'}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Corpo do Card */}
@@ -91,22 +91,15 @@ export default function ProductCard({ product, onAnalyze, onAffiliate, onNotific
           {product.nome}
         </h3>
 
-        {/* Linha 2 - Preço e Comissão */}
-        <div className="mb-1 flex items-center justify-between">
-          <div>
-            <div className="text-[18px] font-extrabold text-[#D0011B] dark:text-white">
-              {product.preco}
-            </div>
-            {product.precoOriginal && (
-              <div className="text-[10px] text-gray-400 dark:text-white/30 line-through -mt-1">
-                {product.precoOriginal}
-              </div>
-            )}
+        {/* Linha 2 - Preço */}
+        <div className="mb-1.5 flex items-end gap-2 text-left">
+          <div className="text-[20px] font-extrabold text-[#D0011B] dark:text-white flex items-baseline">
+            {product.preco}
           </div>
-          {product.comissao && (
-            <span className="bg-primary text-white text-[9px] px-2 py-0.5 rounded-full font-bold h-fit shrink-0">
-              {product.comissao} comissão
-            </span>
+          {product.precoOriginal && (
+            <div className="text-[12px] font-medium text-gray-400 dark:text-white/30 line-through mb-1">
+              {product.precoOriginal}
+            </div>
           )}
         </div>
 
@@ -132,16 +125,30 @@ export default function ProductCard({ product, onAnalyze, onAffiliate, onNotific
         </div>
 
         {/* Linha 5 - Botão Análise */}
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            onAnalyze(product);
-          }}
-          className="w-full flex items-center justify-center gap-1.5 py-2 bg-[#D0011B] hover:brightness-110 text-white rounded-[8px] text-[12px] font-bold transition-all shadow-sm active:scale-95"
-        >
-          <BarChart2 size={13} />
-          Análise
-        </button>
+        {/* Linha 5 - Botões Vender e Afiliar */}
+        <div className="flex items-center gap-2 mt-4">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onAnalyze(product);
+            }}
+            className="flex-1 bg-[#D0011B]/10 text-[#D0011B] border border-[#D0011B]/20 rounded-[8px] py-2 text-[12px] font-bold hover:bg-[#D0011B]/20 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <Users size={14} />
+            Vender
+          </button>
+          
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(product.link, '_blank'); 
+            }}
+            className="flex-1 bg-[#D0011B] text-white rounded-[8px] py-2 text-[12px] font-bold hover:brightness-110 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <ExternalLink size={14} />
+            Afiliar-se
+          </button>
+        </div>
       </div>
     </div>
   );

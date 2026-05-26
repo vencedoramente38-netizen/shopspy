@@ -25,9 +25,9 @@ export default function Sidebar({ isExpanded, setIsExpanded, activeItem, onItemC
   const handleLogout = async () => {
     await supabase.auth.signOut();
     localStorage.removeItem('shopspy_auth');
-    localStorage.removeItem('shopspy_plan');
+    localStorage.removeItem('shopspy_is_admin');
     localStorage.removeItem('shopspy_user_email');
-    localStorage.setItem('shopspy_is_admin', 'false');
+    localStorage.removeItem('shopspy_plan');
     localStorage.setItem('shopspy_notifications_enabled', 'false');
     onLogout();
   };

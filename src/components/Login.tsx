@@ -19,6 +19,29 @@ export default function Login({ onLogin, onBack }: LoginProps) {
     setErrorMsg('');
     setIsLoading(true);
 
+    // Verificar se Supabase está configurado
+    const hasSupabase = !!import.meta.env.VITE_SUPABASE_URL &&
+                        !!import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!hasSupabase) {
+      // Fallback local
+      if (email === 'shopspyadmin@gmail.com' && password === 'ShopSpy@Admin2026') {
+        localStorage.setItem('shopspy_auth', 'true');
+        localStorage.setItem('shopspy_is_admin', 'true');
+        localStorage.setItem('shopspy_user_email', email);
+        onLogin();
+      } else if (email === 'usuarioshopspy765@gmail.com' && password === 'shopspy9246') {
+        localStorage.setItem('shopspy_auth', 'true');
+        localStorage.setItem('shopspy_is_admin', 'false');
+        localStorage.setItem('shopspy_user_email', email);
+        onLogin();
+      } else {
+        setErrorMsg('E-mail ou senha incorretos');
+      }
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),

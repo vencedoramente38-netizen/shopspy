@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flame, Sun, Moon, Bell, Download, X } from 'lucide-react';
+import { Flame, Sun, Moon, Bell, Download, X, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
 import InstallModal from './InstallModal';
@@ -73,6 +73,12 @@ export default function Header({
       className="h-16 flex items-center justify-between px-6"
     >
       <div className="flex items-center">
+        <button 
+          onClick={() => window.dispatchEvent(new CustomEvent('shopspy_toggle_sidebar'))}
+          className="mr-3 md:hidden flex items-center justify-center text-white"
+        >
+          <Menu size={24} />
+        </button>
         <h1 className="text-lg font-bold text-white font-['Space Grotesk']">{title}</h1>
       </div>
 

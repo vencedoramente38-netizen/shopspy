@@ -27,11 +27,11 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[400px] bg-[#111111] border border-white/[0.08] rounded-[24px] p-8 shadow-2xl transition-all duration-300 z-10"
+            className="relative w-full max-w-[400px] bg-white dark:bg-[#111111] border border-black/10 dark:border-white/[0.08] rounded-[24px] p-8 shadow-2xl transition-all duration-300 z-10"
           >
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 w-8 h-8 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+              className="absolute top-5 right-5 w-8 h-8 bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 dark:text-white/50 dark:hover:text-white transition-colors"
             >
               <X size={16} />
             </button>
@@ -42,53 +42,53 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
                  <div className="w-1.5 h-1.5 bg-primary/20 rounded-full absolute top-1" />
               </div>
               
-              <h2 className="text-[22px] font-bold text-white text-center leading-tight font-['Space Grotesk']">
+              <h2 className="text-[22px] font-bold text-gray-900 dark:text-white text-center leading-tight font-['Space Grotesk']">
                 Instale o ShopSpy no seu iPhone
               </h2>
-              <p className="text-[14px] text-white/45 text-center mt-3 leading-relaxed px-2 font-medium font-['Space Grotesk']">
+              <p className="text-[14px] text-gray-600 dark:text-white/45 text-center mt-3 leading-relaxed px-2 font-medium font-['Space Grotesk']">
                 Acesse a plataforma como um app nativo, direto da sua tela inicial.
               </p>
             </div>
 
             <div className="space-y-3 mt-8">
-              <div className="bg-white/[0.03] border border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
+              <div className="bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
                 <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-[13px] font-bold text-white shrink-0">1</div>
                 <div className="flex items-center gap-3">
-                  <div className="bg-white/5 p-2 rounded-lg">
-                    <MoreHorizontal size={18} className="text-white/60 shrink-0" />
+                  <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg">
+                    <MoreHorizontal size={18} className="text-gray-500 dark:text-white/60 shrink-0" />
                   </div>
-                  <span className="text-[14px] text-white/80 font-medium font-['Space Grotesk'] leading-tight">
+                  <span className="text-[14px] text-gray-800 dark:text-white/80 font-medium font-['Space Grotesk'] leading-tight">
                     Na barra de pesquisa do Safari, toque nos 3 pontinhos
                   </span>
                 </div>
               </div>
 
-              <div className="bg-white/[0.03] border border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
+              <div className="bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
                 <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-[13px] font-bold text-white shrink-0">2</div>
                 <div className="flex items-center gap-3">
-                  <div className="bg-white/5 p-2 rounded-lg">
-                    <Share2 size={18} className="text-white/60 shrink-0" />
+                  <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg">
+                    <Share2 size={18} className="text-gray-500 dark:text-white/60 shrink-0" />
                   </div>
-                  <span className="text-[14px] text-white/80 font-medium font-['Space Grotesk'] leading-tight">
+                  <span className="text-[14px] text-gray-800 dark:text-white/80 font-medium font-['Space Grotesk'] leading-tight">
                     Toque em Compartilhar no menu que aparece
                   </span>
                 </div>
               </div>
 
-              <div className="bg-white/[0.03] border border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
+              <div className="bg-gray-50 dark:bg-white/[0.03] border border-black/5 dark:border-white/[0.05] p-4 rounded-2xl flex items-center gap-4">
                 <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-[13px] font-bold text-white shrink-0">3</div>
                 <div className="flex items-center gap-3">
-                  <div className="bg-white/5 p-2 rounded-lg">
-                    <PlusSquare size={18} className="text-white/60 shrink-0" />
+                  <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg">
+                    <PlusSquare size={18} className="text-gray-500 dark:text-white/60 shrink-0" />
                   </div>
-                  <span className="text-[14px] text-white/80 font-medium font-['Space Grotesk'] leading-tight">
+                  <span className="text-[14px] text-gray-800 dark:text-white/80 font-medium font-['Space Grotesk'] leading-tight">
                     Toque em Adicionar à Tela de Início e confirme
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-2 text-[12px] text-white/30 mt-8 mb-6 font-['Space Grotesk']">
+            <div className="flex items-center justify-center gap-2 text-[12px] text-gray-500 dark:text-white/30 mt-8 mb-6 font-['Space Grotesk']">
               <Apple size={14} />
               <span>Disponível apenas para iPhone com Safari</span>
             </div>

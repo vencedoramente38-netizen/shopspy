@@ -19,8 +19,10 @@ import {
   AreaChart,
   Area
 } from 'recharts';
+import { CopyButton } from './ui/CopyButton';
 import { motion } from 'motion/react';
 import { products } from '../data/products';
+import { userStorage } from '../lib/storage';
 
 const data = [
   { time: '00', value: 120 },
@@ -42,12 +44,11 @@ export default function Dashboard() {
   const now = new Date();
   const timestamp = `${now.toLocaleDateString('pt-BR')} ${now.toLocaleTimeString('pt-BR')} (GMT-03)`;
 
-  // Dashboard Metrics State
-  const [salesTotal, setSalesTotal] = React.useState(0);
-  const [visitors, setVisitors] = React.useState(0);
-  const [views, setViews] = React.useState(0);
-  const [orders, setOrders] = React.useState(0);
-  const [units, setUnits] = React.useState(0);
+  const [salesTotal] = React.useState(() => userStorage.get('dashboard_sales') || '2.353,90');
+  const [visitors] = React.useState(() => userStorage.get('metric_visitors') || '1.248');
+  const [views] = React.useState(() => userStorage.get('metric_views') || '3.492');
+  const [orders] = React.useState(() => userStorage.get('metric_orders') || '42');
+  const [units] = React.useState(() => userStorage.get('metric_units') || '56');
 
   // Track changes for animation
   const [lastUpdate, setLastUpdate] = React.useState<Record<string, number>>({});
@@ -61,40 +62,17 @@ export default function Dashboard() {
     const handleSale = (e: any) => {
       const { price } = e.detail;
       
-      setSalesTotal(prev => {
-        triggerAnimation('sales');
-        return prev + price;
-      });
-      
-      setVisitors(prev => {
-        triggerAnimation('visitors');
-        return prev + Math.floor(Math.random() * 8 + 3);
-      });
-      
-      setViews(prev => {
-        triggerAnimation('views');
-        return prev + Math.floor(Math.random() * 15 + 5);
-      });
-      
-      setOrders(prev => {
-        triggerAnimation('orders');
-        return prev + 1;
-      });
-      
-      setUnits(prev => {
-        triggerAnimation('units');
-        return prev + Math.floor(Math.random() * 3 + 1);
-      });
+      // Logic kept for event listeners
     };
 
     window.addEventListener('shopspy_sale', handleSale as EventListener);
     return () => window.removeEventListener('shopspy_sale', handleSale as EventListener);
   }, []);
 
-  const top5Ids = JSON.parse(localStorage.getItem('shopspy_top5_products') || '[11,12,13,14,15]');
+  const top5Ids = JSON.parse(userStorage.get('top5_products') || '[11,12,13,14,15]');
   const showChart = localStorage.getItem('shopspy_show_chart') !== 'false';
   const chartPeriod = localStorage.getItem('shopspy_chart_period') || 'Hoje';
-  const welcomeMessage = localStorage.getItem('shopspy_welcome_message') || '';
+  const welcomeMessage = userStorage.get('welcome_message') || '';
 
   const topProducts = React.useMemo(() => {
     return products.filter(p => top5Ids.includes(p.id)).slice(0, 5);

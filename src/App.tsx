@@ -282,8 +282,11 @@ export default function App() {
                     <ProductCard 
                       key={product.id} 
                       product={product} 
-                      onAnalyze={(p) => setSelectedProduct(p)}
-                      onAffiliate={() => showToast('Redirecionando para a Shopee...')}
+                      onAnalyze={(p) => {
+                         localStorage.setItem('shopspy_temp_product', JSON.stringify(p));
+                         setActiveView('find-group');
+                      }}
+                      onAffiliate={() => {}}
                       onNotification={(msg) => showToast(msg)}
                     />
                   ))}
@@ -371,20 +374,7 @@ export default function App() {
         />
       )}
 
-      {/* Mobile Floating Action Button */}
-      <AnimatePresence>
-        {isMobile && !isSidebarExpanded && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            onClick={() => setIsSidebarExpanded(true)}
-            className="fixed bottom-8 right-6 z-[90] w-14 h-14 bg-[#D0011B] rounded-full shadow-[0_8px_25px_rgba(208,1,27,0.3)] flex items-center justify-center text-white active:scale-95 transition-all lg:hidden"
-          >
-            <Menu size={28} />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* Mobile Floating Action Button Removed for Header-based menu */}
 
       {/* Toast Notification */}
       <AnimatePresence>

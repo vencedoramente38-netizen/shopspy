@@ -711,14 +711,14 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
 
             <div className="flex items-baseline mb-12">
               <span className="text-lg font-bold mr-1 text-[#D0011B]">R$</span>
-              <span className="text-6xl font-black tracking-tight text-[#D0011B]">297</span>
+              <span className="text-6xl font-black tracking-tight text-[#D0011B]">97</span>
               <span className="text-[#555555] text-lg ml-2 font-bold">/mês</span>
             </div>
 
             <motion.button 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => window.open('https://pay.kirvano.com/c014c5d3-2a6f-44fb-b43e-8ef389b16f58', '_blank')}
+              onClick={() => window.open('https://ggcheckout.app/checkout/v3/wPmdkoLh4QAWSIoHjAVD', '_blank')}
               className="w-full py-4 rounded-2xl font-black text-md mb-12 bg-white border border-black/10 text-black shadow-sm transition-all duration-300"
             >
               Assinar Plano Mensal
@@ -773,16 +773,15 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
             <div className="flex flex-col mb-4 text-left">
               <div className="flex items-baseline">
                 <span className="text-lg font-bold mr-1 text-[#D0011B]">R$</span>
-                <span className="text-6xl font-black tracking-tight text-[#D0011B]">497</span>
-                <span className="text-[#555555] text-lg ml-2 font-bold">/vitalício</span>
+                <span className="text-6xl font-black tracking-tight text-[#D0011B]">147</span>
               </div>
-              <p className="text-[#D0011B] text-sm font-black mt-4">ou 12x de R$ 49,70</p>
+              <p className="text-[#D0011B] text-sm font-black mt-4">à vista com acesso vitalício</p>
             </div>
 
             <motion.button 
               whileHover={{ opacity: 0.9, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => window.open('https://pay.kirvano.com/9f52d108-cba5-4e9d-9235-036b49285665', '_blank')}
+              onClick={() => window.open('https://ggcheckout.app/checkout/v3/WQ583Zqro94TV375rMYX', '_blank')}
               className="w-full py-4 rounded-2xl font-black text-md flex items-center justify-center gap-2 mb-12 bg-[#D0011B] shadow-[0_10px_30px_-5px_rgba(208,1,27,0.4)] text-white transition-all duration-300"
             >
               <Zap size={16} fill="white" />

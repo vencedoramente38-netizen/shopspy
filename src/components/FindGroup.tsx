@@ -80,7 +80,19 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem('shopspy_favorites') || '[]');
-    const filtered = products.filter(p => favorites.includes(p.id));
+    let filtered = products.filter(p => favorites.includes(p.id));
+    
+    const tempProductStr = localStorage.getItem('shopspy_temp_product');
+    if (tempProductStr) {
+      const tempProduct = JSON.parse(tempProductStr);
+      setSelectedProduct(tempProduct);
+      localStorage.removeItem('shopspy_temp_product');
+      // Adiciona na visualização local se não estivesse lá
+      if (!favorites.includes(tempProduct.id)) {
+        filtered = [tempProduct, ...filtered];
+      }
+    }
+
     setFavoriteProducts(filtered);
   }, []);
 
