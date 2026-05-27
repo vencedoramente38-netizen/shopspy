@@ -85,22 +85,39 @@ export default function Login({ onLogin, onBack }: LoginProps) {
       // Supabase falhou (ex: "Failed to fetch") — usar fallback local
       console.warn('Supabase indisponível, usando autenticação local:', err);
 
-      const account = localAccounts.find(
-        a => a.email === email.toLowerCase().trim() && a.password === password
+      const emailNormalized = email.toLowerCase().trim();
+
+      // Conta admin hardcoded
+      const adminAccounts = [
+        { email: 'shopspyadmin@gmail.com', password: 'ShopSpy@Admin2026' },
+      ];
+
+      const adminAccount = adminAccounts.find(
+        a => a.email === emailNormalized && a.password === password
       );
 
-      if (account) {
+      if (adminAccount) {
         localStorage.setItem('shopspy_auth', 'true');
-        localStorage.setItem('shopspy_is_admin', account.isAdmin ? 'true' : 'false');
-        localStorage.setItem('shopspy_user_email', account.email);
-        localStorage.setItem('shopspy_plan', account.plan);
+        localStorage.setItem('shopspy_is_admin', 'true');
+        localStorage.setItem('shopspy_user_email', adminAccount.email);
+        localStorage.setItem('shopspy_plan', 'vitalicio');
         localStorage.setItem('shopspy_notifications_enabled', 'false');
         onLogin();
-      } else {
-        const isAuthError = err instanceof Error &&
-          (err.message === 'Invalid login credentials' || err.message.includes('invalid'));
-        setErrorMsg(isAuthError ? 'E-mail ou senha incorretos' : 'E-mail ou senha incorretos');
+        return;
       }
+
+      // Qualquer email válido com senha padrão shopspy12345
+      if (password === 'shopspy12345' && emailNormalized.includes('@')) {
+        localStorage.setItem('shopspy_auth', 'true');
+        localStorage.setItem('shopspy_is_admin', 'false');
+        localStorage.setItem('shopspy_user_email', emailNormalized);
+        localStorage.setItem('shopspy_plan', 'mensal');
+        localStorage.setItem('shopspy_notifications_enabled', 'false');
+        onLogin();
+        return;
+      }
+
+      setErrorMsg('E-mail ou senha incorretos');
     } finally {
       setIsLoading(false);
     }
