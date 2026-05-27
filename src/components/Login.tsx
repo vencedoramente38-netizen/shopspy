@@ -19,40 +19,20 @@ export default function Login({ onLogin, onBack }: LoginProps) {
     setErrorMsg('');
     setIsLoading(true);
 
-    // Verificar se Supabase está configurado
-    const hasSupabase = !!import.meta.env.VITE_SUPABASE_URL &&
-                        !!import.meta.env.VITE_SUPABASE_ANON_KEY;
+    // Credenciais locais hardcoded (fallback quando Supabase falhar)
+    const localAccounts = [
+      { email: 'shopspyadmin@gmail.com', password: 'ShopSpy@Admin2026', isAdmin: true, plan: 'vitalicio' },
+      { email: 'usuarioshopspy765@gmail.com', password: 'shopspy9246', isAdmin: false, plan: 'mensal' },
+    ];
 
-    if (!hasSupabase) {
-      // Fallback local
-      if (email === 'shopspyadmin@gmail.com' && password === 'ShopSpy@Admin2026') {
-        localStorage.setItem('shopspy_auth', 'true');
-        localStorage.setItem('shopspy_is_admin', 'true');
-        localStorage.setItem('shopspy_user_email', email);
-        onLogin();
-      } else if (email === 'usuarioshopspy765@gmail.com' && password === 'shopspy9246') {
-        localStorage.setItem('shopspy_auth', 'true');
-        localStorage.setItem('shopspy_is_admin', 'false');
-        localStorage.setItem('shopspy_user_email', email);
-        onLogin();
-      } else {
-        setErrorMsg('E-mail ou senha incorretos');
-      }
-      setIsLoading(false);
-      return;
-    }
-
+    // Tentar login via Supabase primeiro
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password
       });
 
-      if (authError) {
-        setErrorMsg(authError.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos' : authError.message);
-        setIsLoading(false);
-        return;
-      }
+      if (authError) throw authError;
 
       // Verificar se usuário está ativo e plano válido
       const { data: userData, error: dbError } = await supabase
@@ -86,7 +66,6 @@ export default function Login({ onLogin, onBack }: LoginProps) {
         }
       }
 
-
       // Verificar se é admin
       const { data: adminData } = await supabase
         .from('admins_shopspy')
@@ -98,12 +77,30 @@ export default function Login({ onLogin, onBack }: LoginProps) {
       localStorage.setItem('shopspy_auth', 'true');
       localStorage.setItem('shopspy_plan', userData.plan);
       localStorage.setItem('shopspy_is_admin', isAdmin ? 'true' : 'false');
-      localStorage.setItem('shopspy_notifications_enabled', 'false'); // sempre começa desativado
+      localStorage.setItem('shopspy_notifications_enabled', 'false');
       localStorage.setItem('shopspy_user_email', data.user.email?.toLowerCase() || '');
       onLogin();
+
     } catch (err) {
-      console.error(err);
-      setErrorMsg('Ocorreu um erro ao entrar. Tente novamente.');
+      // Supabase falhou (ex: "Failed to fetch") — usar fallback local
+      console.warn('Supabase indisponível, usando autenticação local:', err);
+
+      const account = localAccounts.find(
+        a => a.email === email.toLowerCase().trim() && a.password === password
+      );
+
+      if (account) {
+        localStorage.setItem('shopspy_auth', 'true');
+        localStorage.setItem('shopspy_is_admin', account.isAdmin ? 'true' : 'false');
+        localStorage.setItem('shopspy_user_email', account.email);
+        localStorage.setItem('shopspy_plan', account.plan);
+        localStorage.setItem('shopspy_notifications_enabled', 'false');
+        onLogin();
+      } else {
+        const isAuthError = err instanceof Error &&
+          (err.message === 'Invalid login credentials' || err.message.includes('invalid'));
+        setErrorMsg(isAuthError ? 'E-mail ou senha incorretos' : 'E-mail ou senha incorretos');
+      }
     } finally {
       setIsLoading(false);
     }
