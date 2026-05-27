@@ -25,18 +25,18 @@ import { products } from '../data/products';
 import { userStorage } from '../lib/storage';
 
 const data = [
-  { time: '00', value: 120 },
-  { time: '02', value: 80 },
-  { time: '04', value: 45 },
-  { time: '06', value: 90 },
-  { time: '08', value: 450 },
-  { time: '10', value: 890 },
-  { time: '12', value: 1250 },
-  { time: '14', value: 1680 },
-  { time: '16', value: 1950 },
-  { time: '18', value: 2120 },
-  { time: '20', value: 2353.9 },
-  { time: '22', value: 2353.9 },
+  { time: '00', value: 0 },
+  { time: '02', value: 0 },
+  { time: '04', value: 0 },
+  { time: '06', value: 0 },
+  { time: '08', value: 0 },
+  { time: '10', value: 0 },
+  { time: '12', value: 0 },
+  { time: '14', value: 0 },
+  { time: '16', value: 0 },
+  { time: '18', value: 0 },
+  { time: '20', value: 0 },
+  { time: '22', value: 0 },
 ];
 
 export default function Dashboard() {
@@ -44,11 +44,11 @@ export default function Dashboard() {
   const now = new Date();
   const timestamp = `${now.toLocaleDateString('pt-BR')} ${now.toLocaleTimeString('pt-BR')} (GMT-03)`;
 
-  const [salesTotal] = React.useState(() => userStorage.get('dashboard_sales') || '2.353,90');
-  const [visitors] = React.useState(() => userStorage.get('metric_visitors') || '1.248');
-  const [views] = React.useState(() => userStorage.get('metric_views') || '3.492');
-  const [orders] = React.useState(() => userStorage.get('metric_orders') || '42');
-  const [units] = React.useState(() => userStorage.get('metric_units') || '56');
+  const [salesTotal] = React.useState(() => userStorage.get('dashboard_sales') || '0,00');
+  const [visitors] = React.useState(() => userStorage.get('metric_visitors') || '0');
+  const [views] = React.useState(() => userStorage.get('metric_views') || '0');
+  const [orders] = React.useState(() => userStorage.get('metric_orders') || '0');
+  const [units] = React.useState(() => userStorage.get('metric_units') || '0');
 
   // Track changes for animation
   const [lastUpdate, setLastUpdate] = React.useState<Record<string, number>>({});

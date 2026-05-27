@@ -151,6 +151,57 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
   return (
     <div className="flex-1 bg-gray-50 dark:bg-[#080808] p-6 custom-scrollbar overflow-y-auto font-['Space Grotesk'] min-h-screen text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-4xl mx-auto space-y-6">
+
+        {/* Header */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#D0011B] inline-block"></span>
+            <h1 className="text-[18px] font-bold text-gray-900 dark:text-white">Encontrar Grupo</h1>
+            <span className="ml-1 bg-[#e8f0ff] text-[#2563EB] text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wide">FACEBOOK</span>
+          </div>
+          <p className="text-[13px] text-gray-500 dark:text-white/40 ml-4">Selecione um produto, adicione seu link de afiliado e encontre grupos para divulgar</p>
+        </div>
+
+        {/* Stats Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#fff0f0] flex items-center justify-center flex-shrink-0">
+              <Users size={18} className="text-[#D0011B]" />
+            </div>
+            <div>
+              <div className="text-[16px] font-bold text-gray-900 dark:text-white leading-tight">13</div>
+              <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Grupos Relevantes</div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#fff0f0] flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D0011B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div>
+              <div className="text-[16px] font-bold text-[#D0011B] leading-tight">581K+</div>
+              <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Membros Totais</div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#f0f4ff] flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <div>
+              <div className="text-[16px] font-bold text-[#2563EB] leading-tight">1-Click</div>
+              <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Divulgação</div>
+            </div>
+          </div>
+          <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[#f0fff4] flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <div className="text-[16px] font-bold text-[#16a34a] leading-tight">Grátis</div>
+              <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Custo de Uso</div>
+            </div>
+          </div>
+        </div>
+
         {/* Seção 1 - Selecione um Produto */}
         <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[14px] p-5 shadow-xl transition-colors duration-300">
           <div className="flex items-center gap-[10px] mb-6">
@@ -165,6 +216,19 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
               <label className="text-[10px] uppercase text-gray-400 dark:text-white/40 font-bold tracking-wider">MEUS FAVORITOS</label>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {favoriteProducts.length === 0 && (
+                  <div className="col-span-2 border border-dashed border-black/10 dark:border-white/10 rounded-[12px] py-10 flex flex-col items-center justify-center gap-3">
+                    <span className="text-4xl">⭐</span>
+                    <p className="text-[13px] text-gray-500 dark:text-white/40 font-medium">Você ainda não favoritou produtos</p>
+                    <button
+                      onClick={() => {
+                        // Navegar para Produtos Virais via evento
+                        window.dispatchEvent(new CustomEvent('shopspy_navigate', { detail: { tab: 'products' } }));
+                      }}
+                      className="bg-[#D0011B] text-white text-[13px] font-bold px-5 py-2 rounded-[8px] hover:brightness-110 transition-all"
+                    >Ir para Produtos Virais</button>
+                  </div>
+                )}
                 {favoriteProducts.map((p) => (
                   <div
                     key={p.id}
@@ -216,11 +280,12 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
               </div>
               <input
                 type="text"
-                placeholder="Cole seu link de afiliado aqui..."
+                placeholder="https://shope.ee/link_afiliado"
                 value={affiliateLink}
                 onChange={(e) => setAffiliateLink(e.target.value)}
                 className="w-full bg-gray-50 dark:bg-[#1a1a1a] border border-black/5 dark:border-white/[0.08] rounded-[10px] p-3 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/20 focus:outline-none transition-all duration-200 text-sm"
               />
+              <p className="text-[11px] text-[#D0011B] mt-1">O link de afiliado será injetado automaticamente na copy gerada ao final da extração.</p>
             </div>
           </div>
 
