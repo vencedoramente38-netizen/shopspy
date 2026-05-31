@@ -122,6 +122,13 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Top Nav (Mobile menu and User profile) */}
           <div className="flex justify-between items-center mb-8">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('shopspy_toggle_sidebar'))}
+              className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all duration-200"
+              aria-label="Abrir menu"
+            >
+              <Menu size={20} />
+            </button>
             <div className="flex items-center gap-3 ml-auto cursor-pointer group invisible" title="Clique para sair">
               {/* Profile removed */}
             </div>
