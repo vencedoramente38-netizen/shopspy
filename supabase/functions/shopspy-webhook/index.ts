@@ -119,46 +119,28 @@ serve(async (req) => {
       (data.status && String(data.status).toLowerCase() === 'paid')
 
     if (isPurchaseApproved) {
-      let userId: string | undefined
-
-      // Checar se usuário já existe
+      // Verificar se já existe na tabela
       const { data: existingUser } = await supabase
         .from('users_shopspy')
-        .select('id')
+        .select('id, email')
         .eq('email', email)
-        .maybeSingle()
+        .maybeSingle();
 
-      if (existingUser?.id) {
-        userId = existingUser.id
-        console.log(`Usuário existente: ${userId}`)
-      } else {
-        // Criar novo usuário no Auth
-        const { data: newUser, error: authError } = await supabase.auth.admin.createUser({
+      if (!existingUser) {
+        // Criar usuário no Auth com senha temporária
+        const tempPassword = `temp_${Date.now()}_shopspy`;
+        const { data: newAuthUser, error: authError } = await supabase.auth.admin.createUser({
           email,
-          password: defaultPassword,
+          password: tempPassword,
           email_confirm: true,
-          user_metadata: { name, plan }
-        })
+          user_metadata: { name, plan, needs_password_reset: true }
+        });
 
-        if (authError) {
-          if (authError.message.toLowerCase().includes('already')) {
-            const { data: { users } } = await supabase.auth.admin.listUsers()
-            const found = users.find(u => u.email?.toLowerCase() === email)
-            if (found) userId = found.id
-          } else {
-            throw authError
-          }
-        } else {
-          userId = newUser?.user?.id
-          console.log(`Novo usuário criado: ${userId}`)
-        }
-      }
+        const userId = newAuthUser?.user?.id;
 
-      if (userId) {
-        // Upsert na tabela de usuários
-        const { error: upsertError } = await supabase
-          .from('users_shopspy')
-          .upsert({
+        if (userId) {
+          // Inserir na tabela liberando o email
+          const { error: insertError } = await supabase.from('users_shopspy').insert({
             id: userId,
             email,
             name,
@@ -167,10 +149,19 @@ serve(async (req) => {
             is_active: true,
             transaction_id: transactionId,
             customer_name: name
-          }, { onConflict: 'email' })
-
-        if (upsertError) throw upsertError
-        console.log(`Usuário provisionado com sucesso: ${email} | Plano: ${plan}`)
+          });
+          
+          if (insertError) console.error('Erro ao inserir usuário:', insertError);
+        } else if (authError) {
+          console.error('Erro ao criar usuário no Auth:', authError);
+        }
+      } else {
+        // Atualizar plano se já existir
+        const { error: updateError } = await supabase.from('users_shopspy')
+          .update({ plan, plan_expires_at: expiresAt, is_active: true })
+          .eq('email', email);
+        
+        if (updateError) console.error('Erro ao atualizar usuário:', updateError);
       }
     }
 
