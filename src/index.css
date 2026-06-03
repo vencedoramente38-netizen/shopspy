@@ -58,3 +58,9 @@
 .animate-slide-out {
   animation: slideOutRight 0.3s ease forwards;
 }
+
+.focus-glow:focus {
+  outline: none;
+  border-color: rgba(208, 1, 27, 0.5) !important;
+  box-shadow: 0 0 15px rgba(208, 1, 27, 0.3) !important;
+}

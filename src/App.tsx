@@ -12,6 +12,8 @@ import Login from './components/Login';
 import LandingPage from './components/LandingPage';
 import ReferralPage from './components/ReferralPage';
 import AdminPanel from './components/AdminPanel';
+import SupportChat from './components/SupportChat';
+import { Toaster } from 'react-hot-toast';
 import { products } from './data/products';
 import { Product, Category } from './types';
 import { motion, AnimatePresence } from 'motion/react';
@@ -407,6 +409,8 @@ export default function App() {
           background: rgba(208, 1, 27, 0.4);
         }
       `}} />
+      <SupportChat />
+      <Toaster position="top-right" />
     </div>
   );
 }

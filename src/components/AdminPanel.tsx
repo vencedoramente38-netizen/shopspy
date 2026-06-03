@@ -334,7 +334,7 @@ export default function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
                     placeholder="••••••••••••"
-                    className={`w-full ${colors.input} border ${passwordError ? 'border-[#D0011B]' : colors.border} rounded-[12px] px-4 py-3.5 ${colors.text} outline-none focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/15 transition-all text-center tracking-widest`}
+                    className={`w-full ${colors.input} border ${passwordError ? 'border-[#D0011B]' : colors.border} rounded-[12px] px-4 py-3.5 ${colors.text} outline-none focus:border-[#D0011B]/80 focus-glow transition-all text-center tracking-widest`}
                   />
                   {passwordError && (
                     <p className="text-[12px] text-[#D0011B] font-bold text-center">Senha incorreta</p>

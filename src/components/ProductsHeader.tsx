@@ -63,7 +63,7 @@ export default function ProductsHeader({ products, activeCategory, setActiveCate
           placeholder="Buscar produto pelo nome..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-gray-50 dark:bg-[#111111] border border-white/[0.08] rounded-lg py-3 pl-12 pr-4 text-gray-900 dark:text-white text-sm focus:outline-none transition-all duration-200 placeholder:text-gray-400 dark:placeholder:text-white/30"
+          className="w-full bg-gray-50 dark:bg-[#111111] border border-white/[0.08] rounded-lg py-3 pl-12 pr-4 text-gray-900 dark:text-white text-sm focus:outline-none focus:border-[#D0011B]/50 focus-glow transition-all duration-200 placeholder:text-gray-400 dark:placeholder:text-white/30"
         />
       </div>
 

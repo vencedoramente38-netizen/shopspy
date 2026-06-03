@@ -219,7 +219,7 @@ export default function Login({ onLogin, onBack }: LoginProps) {
         <div className="flex flex-col items-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <img 
-              src="https://i.postimg.cc/NfH1HDns/download-10-removebg-preview.png" 
+              src="https://i.postimg.cc/NFkJ8vX6/edd68b75-b6bf-4dcd-af88-7dd1332566ed.png" 
               alt="ShopSpy Logo" 
               className="h-16 w-auto object-contain"
               referrerPolicy="no-referrer"
@@ -266,7 +266,7 @@ export default function Login({ onLogin, onBack }: LoginProps) {
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#f9f9fb] border border-black/[0.08] rounded-[12px] px-4 py-3.5 text-black text-[14px] placeholder-black/20 transition-all duration-200 outline-none focus:bg-white focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5"
+              className="w-full bg-[#f9f9fb] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] rounded-[12px] px-4 py-3.5 text-black dark:text-white text-[14px] placeholder-black/20 dark:placeholder-white/20 transition-all duration-200 outline-none focus:bg-white dark:focus:bg-white/10 focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5 focus-glow"
             />
           </div>
 
@@ -281,11 +281,11 @@ export default function Login({ onLogin, onBack }: LoginProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && (activeTab === 'register' ? handleRegister() : handleLogin())}
-                className="w-full bg-[#f9f9fb] border border-black/[0.08] rounded-[12px] px-4 py-3.5 text-black text-[14px] placeholder-black/20 transition-all duration-200 outline-none focus:bg-white focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5"
+                className="w-full bg-[#f9f9fb] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] rounded-[12px] px-4 py-3.5 text-black dark:text-white text-[14px] placeholder-black/20 dark:placeholder-white/20 transition-all duration-200 outline-none focus:bg-white dark:focus:bg-white/10 focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5 focus-glow"
               />
               <button 
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-black/30 hover:text-black/60 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-black/30 dark:text-white/30 hover:text-black/60 dark:hover:text-white/60 transition-colors"
                 type="button"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -303,11 +303,12 @@ export default function Login({ onLogin, onBack }: LoginProps) {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleRegister()}
-                  className="w-full bg-[#f9f9fb] border border-black/[0.08] rounded-[12px] px-4 py-3.5 text-black text-[14px] placeholder-black/20 transition-all duration-200 outline-none focus:bg-white focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5"
+                  className="w-full bg-[#f9f9fb] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] rounded-[12px] px-4 py-3.5 text-black dark:text-white text-[14px] placeholder-black/20 dark:placeholder-white/20 transition-all duration-200 outline-none focus:bg-white dark:focus:bg-white/10 focus:border-[#D0011B]/80 focus:ring-4 focus:ring-[#D0011B]/5 focus-glow"
                 />
               </div>
             </div>
           )}
+
 
           {/* MENSAGEM DE ERRO */}
           <AnimatePresence>

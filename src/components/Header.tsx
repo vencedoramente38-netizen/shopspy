@@ -160,9 +160,10 @@ export default function Header({
                             className="flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors group cursor-pointer"
                           >
                             <img 
-                              src={notif.imagem} 
-                              alt={notif.nome} 
-                              className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                              src="https://i.postimg.cc/NFkJ8vX6/edd68b75-b6bf-4dcd-af88-7dd1332566ed.png" 
+                              alt="ShopSpy Logo" 
+                              className="h-10 w-auto object-contain drop-shadow-lg scale-110"
+                              referrerPolicy="no-referrer"
                             />
                             <div className="flex flex-col min-w-0">
                               <span className="text-primary text-[11px] font-bold">🔥 Venda realizada!</span>

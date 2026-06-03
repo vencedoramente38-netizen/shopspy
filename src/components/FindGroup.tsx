@@ -8,7 +8,14 @@ import {
   Download, 
   CheckCircle2,
   ExternalLink,
-  Search
+  Search,
+  Copy,
+  Check,
+  TrendingUp,
+  LayoutDashboard,
+  Megaphone,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Product } from '../types';
@@ -21,35 +28,35 @@ interface FindGroupProps {
 }
 
 const productCopies: Record<number, string> = {
-  1: "Essa calça vai mudar seu guarda-roupa! 👖✨\nCalça Jeans Wide Leg Marmorizada com cintura alta premium — conforto e estilo em uma peça só. Com 33% OFF, corre antes de esgotar!",
-  2: "Look completo por menos! 🔥\nShort Alfaiataria Feminino estilo Zara com cintura alta e zíper lateral. Elegância no dia a dia com 39% de desconto. Aproveite!",
-  3: "Noite quentinha e estilosa! 🌙💕\nKit com 3 pijamas Baby Doll SUEDE com personagens sortidos. 50% OFF — presente perfeito ou mimo pra você mesma!",
-  4: "Resultado real, conforto garantido! ⚡\nCinta Modeladora Espartilho de Emagrecimento com envio imediato. Mais de 62 mil avaliações positivas. Garanta já o seu!",
-  5: "Vitaminas na hora que quiser! 🥤💪\nMini Liquidificador Portátil Shake com 6 lâminas e cabo USB. Leve a qualquer lugar com 58% OFF. Estoque limitado!",
-  6: "Nunca mais fique sem água! 💧\nBebedouro Bomba Elétrica Recarregável para galões de 5L, 10L e 20L. Fácil de instalar, 54% OFF. Compre agora!",
-  7: "Segurança 4K na palma da mão! 📷🏠\nCâmera Externa Wi-Fi com 3 lentes 180°, IA, zoom ótico e visão noturna. Proteção total com 31% OFF!",
-  8: "Projeto perfeito toda vez! 🔧⚡\nParafusadeira Furadeira 48V com 2 baterias, maleta e 28 acessórios. 63% OFF — a melhor relação custo-benefício do mercado!",
-  9: "Cozinha mais prática todo dia! 🥩🥦\nTriturador de Alimentos Elétrico para carnes e legumes, 2/3L, 110v/220v. Agilidade na cozinha por um ótimo preço!",
-  10: "Alívio na hora que você precisar! 💆♀️🔋\nMassageador Elétrico Profissional com 6 níveis e 4 ponteiras. Mais de 25 mil vendidos — 34% OFF por tempo limitado!",
-  11: "Comece sua coleção agora! 🏆\nKit oficial com Álbum da Copa do Mundo 2026 + 3 envelopes de figurinhas. Não fique de fora do maior evento do planeta!",
-  12: "Organização é tudo! 🥡✨\nKit 10 Marmitas Potes 900ml com travas laterais herméticas e livres de BPA. Ideal para marmita, congelador e dieta. Garanta já!",
-  13: "Cozinha mais rápida e saudável! 🥗⚡\nMini Picador Elétrico com 3 lâminas, 250ml — perfeito para carnes, legumes, alho e frutas. 63% OFF por tempo limitado!",
-  14: "Cinema em casa do seu jeito! 🎬🔥\nProjetor HY300 Smart Android 11 com 4K, Wi-Fi, Bluetooth e alto falante embutido. 63% OFF — estoque limitado!",
-  15: "Kit completo para qualquer reparo! 🔧💪\nJogo de Chave Catraca com 40/46 peças, maleta completa e reversível. Mais de 169 mil vendidos — qualidade garantida!",
-  16: "Noites mais quentinhas! 🌙❄️\nCobertor Casal Soft Manta Antialérgica 2x1,80m — macio, quentinho e 45% OFF. Perfeito para o inverno!",
-  17: "Nunca fique com pneu murcho! 🚗💨\nBomba de Ar Portátil 4 em 1 com Powerbank 8000mAh — enche pneu de carro, moto e bicicleta sem fio!",
-  18: "Silhueta dos sonhos! 💃🔥\nCinta Elastique Feminina Modeladora que afina a cintura e define o corpo. Mais de 5 mil clientes satisfeitas!",
-  19: "Pneu calibrado em segundos! ⚡🚘\nCompressor de Ar Elétrico Portátil Digital para carro, moto, bike e bola. Mais de 15 mil vendidos — leve sempre com você!",
-  20: "Poder na palma da mão! 🪚💥\nMini Motosserra Elétrica 6 Polegadas com 2 baterias, recarregável Bivolt. 28% OFF — ideal para jardim e pequenos cortes!",
-  21: "🏆 Coleção Copa do Mundo 2026!\nFigurinhas e pacotes para colecionar e trocar. 80% de desconto por tempo limitado! Garanta o seu antes que esgote! 🔥",
-  22: "🚗 Kit completo para seu carro brilhar!\nShampoo V-Floc + Cera + Pneu Pretinho + Restaurax Vonixx. Tudo que você precisa em um só kit! Qualidade Vonixx com ótimo preço!",
-  23: "👶 Berço Balanço Portátil para seu bebê!\n83% de desconto — de R$ 2.888 por apenas R$ 489! Mosqueteiro incluso, trava de segurança, ideal até 3 anos. Estoque limitado! 🍼",
-  24: "✨ Vestido Longo Elegante para o inverno!\nFenda lateral, manga longa, malha premium. De R$ 89,90 por apenas R$ 33,89 — 62% OFF! Corre antes de acabar! 👗",
-  25: "🇧🇷 Chinelo Masculino Bandeira Brasil!\nAntiderrapante, casual e estiloso. Por apenas R$ 19,90! Perfeito para o verão e para torcer pelo Brasil na Copa! Aproveite!",
-  26: "🩲 Kit 5 Cuecas Boxer Original!\n51% de desconto — de R$ 69,90 por R$ 33,99! Maies de 87 mil vendidos — qualidade comprovada. Garanta o seu agora! 🔥",
-  27: "🛏️ Jogo de Lençol 400 Fios de LUXO!\nDe R$ 39,90 por apenas R$ 9,90 — 75% OFF! Mais de 39 mil vendidos. Tecido liso premium com elástico. Corre antes de esgotar!",
-  28: "⚽ Camisa Torcedor Copa 2026!\nModelo exclusivo masculino para torcer com estilo. R$ 89,90 — estoque limitado! Vista a camisa e apoie o Brasil! 🇧🇷🏆",
-  29: "🔊 Caixa de Som Bluetooth Potente!\nAlt falante grande, som estéreo, AL-3629 Altomex. De R$ 129,99 por R$ 98,99. Qualidade de som incrível para qualquer ambiente! 🎵",
+  1: "🚀 OPORTUNIDADE ÚNICA!\n\nEssa calça vai transformar seu estilo! 👖✨\n\nCalça Jeans Wide Leg Marmorizada com cintura alta premium — a combinação perfeita de conforto e elegância. \n\n🔥 Aproveite 33% OFF agora!\n\n👇 Garanta a sua antes que o estoque acabe:",
+  2: "🔥 LOOK COMPLETO POR MENOS!\n\nShort Alfaiataria Feminino estilo Zara com cintura alta e zíper lateral. Elegância e sofisticação para o seu dia a dia. \n\n💰 39% de desconto exclusivo!\n\n👇 Clique e confira:",
+  3: "🌙 NOITE QUENTINHA E ESTILOSA!\n\nKit com 3 pijamas Baby Doll SUEDE com estampas exclusivas. O presente perfeito ou aquele mimo que você merece! \n\n🎁 50% OFF por tempo limitado!\n\n👇 Compre aqui:",
+  4: "⚡ RESULTADO REAL, CONFORTO GARANTIDO!\n\nCinta Modeladora Espartilho de Emagrecimento com envio imediato. Mais de 62 mil avaliações positivas comprovam a eficácia. \n\n✨ Transforme sua silhueta agora!\n\n👇 Veja os detalhes:",
+  5: "🥤 VITAMINAS NA HORA QUE QUISER!\n\nMini Liquidificador Portátil Shake com 6 lâminas e carregamento USB. Praticidade total para sua rotina saudável. \n\n🚀 58% OFF - Estoque limitado!\n\n👇 Garanta o seu:",
+  6: "💧 NUNCA MAIS FIQUE SEM ÁGUA!\n\nBebedouro Bomba Elétrica Recarregável para galões de 5L, 10L e 20L. Instalação fácil e bateria de longa duração. \n\n✅ 54% OFF!\n\n👇 Compre agora:",
+  7: "📷 SEGURANÇA 4K NA PALMA DA MÃO!\n\nCâmera Externa Wi-Fi com 3 lentes 180°, IA, zoom ótico e visão noturna. Proteção total para sua casa. \n\n🛡️ 31% OFF!\n\n👇 Proteja seu patrimônio:",
+  8: "🔧 PROJETO PERFEITO TODA VEZ!\n\nParafusadeira Furadeira 48V com 2 baterias, maleta e 28 acessórios. A melhor relação custo-benefício do mercado!\n\n🛠️ 63% OFF!\n\n👇 Confira a oferta:",
+  9: "🥩 COZINHA MAIS PRÁTICA TODO DIA!\n\nTriturador de Alimentos Elétrico para carnes e legumes, 2/3L, 110v/220v. Agilidade e rapidez no preparo das suas refeições.\n\n🥗 Oferta especial por tempo limitado!\n\n👇 Veja aqui:",
+  10: "💆‍♀️ ALÍVIO IMEDIATO!\n\nMassageador Elétrico Profissional com 6 níveis e 4 ponteiras. Mais de 25 mil vendidos — relaxamento total onde você estiver.\n\n🔋 34% OFF!\n\n👇 Aproveite:",
+  11: "🏆 COMECE SUA COLEÇÃO AGORA!\n\nKit oficial com Álbum da Copa do Mundo 2026 + 3 envelopes de figurinhas. Não fique de fora do maior evento do planeta!\n\n⚽ Garanta o seu antes que esgote!\n\n👇 Compre aqui:",
+  12: "🥡 ORGANIZAÇÃO É TUDO!\n\nKit 10 Marmitas Potes 900ml com travas laterais herméticas e livres de BPA. Ideal para dieta e congelador.\n\n✨ Qualidade premium!\n\n👇 Garanta já:",
+  13: "🥗 COZINHA MAIS RÁPIDA E SAUDÁVEL!\n\nMini Picador Elétrico com 3 lâminas, 250ml — perfeito para carnes, legumes, alho e frutas.\n\n⚡ 63% OFF por tempo limitado!\n\n👇 Confira:",
+  14: "🎬 CINEMA EM CASA DO SEU JEITO!\n\nProjetor HY300 Smart Android 11 com 4K, Wi-Fi, Bluetooth e alto falante embutido.\n\n🔥 63% OFF — estoque limitado!\n\n👇 Transforme sua sala:",
+  15: "🔧 KIT COMPLETO PARA QUALQUER REPARO!\n\nJogo de Chave Catraca com 40/46 peças, maleta completa e reversível. Mais de 169 mil vendidos — qualidade garantida!\n\n💪 Essencial para sua casa!\n\n👇 Veja aqui:",
+  16: "🌙 NOITES MAIS QUENTINHAS!\n\nCobertor Casal Soft Manta Antialérgica 2x1,80m — macio, quentinho e 45% OFF. Perfeito para o inverno!\n\n❄️ Conforto absoluto!\n\n👇 Compre agora:",
+  17: "🚗 NUNCA FIQUE COM PNEU MURCHO!\n\nBomba de Ar Portátil 4 em 1 com Powerbank 8000mAh — enche pneu de carro, moto e bicicleta sem fio!\n\n💨 Praticidade total!\n\n👇 Confira:",
+  18: "💃 SILHUETA DOS SONHOS!\n\nCinta Elastique Feminina Modeladora que afina a cintura e define o corpo. Mais de 5 mil clientes satisfeitas!\n\n🔥 Realce sua beleza!\n\n👇 Veja os detalhes:",
+  19: "⚡ PNEU CALIBRADO EM SEGUNDOS!\n\nCompressor de Ar Elétrico Portátil Digital para carro, moto, bike e bola. Mais de 15 mil vendidos — leve sempre com você!\n\n🚘 Segurança em primeiro lugar!\n\n👇 Compre aqui:",
+  20: "🪚 PODER NA PALMA DA MÃO!\n\nMini Motosserra Elétrica 6 Polegadas com 2 baterias, recarregável Bivolt. 28% OFF — ideal para jardim e pequenos cortes!\n\n💥 Eficiência garantida!\n\n👇 Confira:",
+  21: "🏆 COLEÇÃO COPA DO MUNDO 2026!\n\nFigurinhas e pacotes para colecionar e trocar. 80% de desconto por tempo limitado! Garanta o seu antes que esgote! 🔥\n\n👇 Compre aqui:",
+  22: "🚗 KIT COMPLETO PARA SEU CARRO BRILHAR!\n\nShampoo V-Floc + Cera + Pneu Pretinho + Restaurax Vonixx. Tudo que você precisa em um só kit! Qualidade Vonixx com ótimo preço!\n\n✨ Deixe seu carro novo!\n\n👇 Veja aqui:",
+  23: "👶 BERÇO BALANÇO PORTÁTIL PARA SEU BEBÊ!\n\n83% de desconto — de R$ 2.888 por apenas R$ 489! Mosqueteiro incluso, trava de segurança, ideal até 3 anos. Estoque limitado! 🍼\n\n👇 Garanta o seu:",
+  24: "✨ VESTIDO LONGO ELEGANTE PARA O INVERNO!\n\nFenda lateral, manga longa, malha premium. De R$ 89,90 por apenas R$ 33,89 — 62% OFF! Corre antes de acabar! 👗\n\n👇 Compre aqui:",
+  25: "🇧🇷 CHINELO MASCULINO BANDEIRA BRASIL!\n\nAntiderrapante, casual e estiloso. Por apenas R$ 19,90! Perfeito para o verão e para torcer pelo Brasil na Copa! Aproveite!\n\n👇 Confira:",
+  26: "🩲 KIT 5 CUECAS BOXER ORIGINAL!\n\n51% de desconto — de R$ 69,90 por R$ 33,99! Mais de 87 mil vendidos — qualidade comprovada. Garanta o seu agora! 🔥\n\n👇 Compre aqui:",
+  27: "🛏️ JOGO DE LENÇOL 400 FIOS DE LUXO!\n\nDe R$ 39,90 por apenas R$ 9,90 — 75% OFF! Mais de 39 mil vendidos. Tecido liso premium com elástico. Corre antes de esgotar!\n\n👇 Garanta o seu:",
+  28: "⚽ CAMISA TORCEDOR COPA 2026!\n\nModelo exclusivo masculino para torcer com estilo. R$ 89,90 — estoque limitado! Vista a camisa e apoie o Brasil! 🇧🇷🏆\n\n👇 Compre aqui:",
+  29: "🔊 CAIXA DE SOM BLUETOOTH POTENTE!\n\nAlt falante grande, som estéreo, AL-3629 Altomex. De R$ 129,99 por R$ 98,99. Qualidade de som incrível para qualquer ambiente! 🎵\n\n👇 Confira:",
 };
 
 const groups = [
@@ -87,7 +94,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
       const tempProduct = JSON.parse(tempProductStr);
       setSelectedProduct(tempProduct);
       localStorage.removeItem('shopspy_temp_product');
-      // Adiciona na visualização local se não estivesse lá
       if (!favorites.includes(tempProduct.id)) {
         filtered = [tempProduct, ...filtered];
       }
@@ -103,7 +109,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
     setLoadingFinished(false);
     setShowResults(false);
     
-    // Simula o final do carregamento para a barra ir a 100%
     setTimeout(() => {
       setLoadingFinished(true);
     }, 2800);
@@ -121,7 +126,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
-    // Adiciona o produto à lista visível se não estiver nela para dar feedback visual
     if (!favoriteProducts.find(p => p.id === product.id)) {
       setFavoriteProducts(prev => [product, ...prev]);
     }
@@ -153,13 +157,16 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
       <div className="max-w-4xl mx-auto space-y-6">
 
         {/* Header */}
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full bg-[#D0011B] inline-block"></span>
-            <h1 className="text-[18px] font-bold text-gray-900 dark:text-white">Encontrar Grupo</h1>
-            <span className="ml-1 bg-[#e8f0ff] text-[#2563EB] text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wide">FACEBOOK</span>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 bg-[#D0011B]/10 rounded-xl flex items-center justify-center">
+            <Plus className="text-[#D0011B]" size={24} />
           </div>
-          <p className="text-[13px] text-gray-500 dark:text-white/40 ml-4">Selecione um produto, adicione seu link de afiliado e encontre grupos para divulgar</p>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-['Space Grotesk'] tracking-tight">
+              Nova Estrutura
+            </h2>
+            <p className="text-gray-500 dark:text-white/40 text-sm">Crie sua estrutura de vendas em segundos</p>
+          </div>
         </div>
 
         {/* Stats Bar */}
@@ -175,7 +182,7 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
           </div>
           <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#fff0f0] flex items-center justify-center flex-shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D0011B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 8v4l3 3"/></svg>
+              <TrendingUp size={18} className="text-[#D0011B]" />
             </div>
             <div>
               <div className="text-[16px] font-bold text-[#D0011B] leading-tight">581K+</div>
@@ -184,7 +191,7 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
           </div>
           <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#f0f4ff] flex items-center justify-center flex-shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <Zap size={18} className="text-[#2563EB]" />
             </div>
             <div>
               <div className="text-[16px] font-bold text-[#2563EB] leading-tight">1-Click</div>
@@ -193,7 +200,7 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
           </div>
           <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[12px] p-4 flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[#f0fff4] flex items-center justify-center flex-shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <Sparkles size={18} className="text-[#16a34a]" />
             </div>
             <div>
               <div className="text-[16px] font-bold text-[#16a34a] leading-tight">Grátis</div>
@@ -222,7 +229,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                     <p className="text-[13px] text-gray-500 dark:text-white/40 font-medium">Você ainda não favoritou produtos</p>
                     <button
                       onClick={() => {
-                        // Navegar para Produtos Virais via evento
                         window.dispatchEvent(new CustomEvent('shopspy_navigate', { detail: { tab: 'products' } }));
                       }}
                       className="bg-[#D0011B] text-white text-[13px] font-bold px-5 py-2 rounded-[8px] hover:brightness-110 transition-all"
@@ -301,11 +307,16 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
               `}
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="flex items-center gap-2">
+                  <Plus size={20} className="animate-spin" />
+                  Gerando Estrutura...
+                </span>
               ) : (
-                <Users size={20} />
+                <span className="flex items-center gap-2">
+                  <Plus size={20} />
+                  Criar Estrutura de Vendas
+                </span>
               )}
-              {isLoading ? 'Buscando...' : 'Encontrar Grupos do Facebook'}
             </button>
           </div>
         </div>
@@ -333,7 +344,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="space-y-6"
             >
-              {/* 2. Card de Extração do Produto */}
               <div className="bg-white dark:bg-[#111111] border border-black/5 dark:border-white/[0.08] rounded-[16px] p-5 mt-5 shadow-[0_2px_12px_rgba(0,0,0,0.08)] dark:shadow-none transition-all duration-300">
                 <img 
                   src={selectedProduct?.imagem} 
@@ -342,7 +352,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                 />
                 
                 <div className="space-y-2">
-                  {/* Campo: NOME */}
                   <div className="bg-[#f7f7f7] dark:bg-[#1a1a1a] rounded-[10px] p-[12px_14px] flex justify-between items-center">
                     <div className="flex-1 min-w-0 pr-4">
                       <label className="block text-[10px] font-bold uppercase text-[#999999] dark:text-[rgba(255,255,255,0.45)] mb-1">NOME:</label>
@@ -353,7 +362,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                     <CopyButton value={selectedProduct?.nome || ""} />
                   </div>
 
-                  {/* Campo: LINK DO PRODUTO */}
                   <div className="bg-[#f7f7f7] dark:bg-[#1a1a1a] rounded-[10px] p-[12px_14px] flex justify-between items-center">
                     <div className="flex-1 min-w-0 pr-4">
                       <label className="block text-[10px] font-bold uppercase text-[#999999] dark:text-[rgba(255,255,255,0.45)] mb-1">LINK DO PRODUTO:</label>
@@ -381,7 +389,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                     </button>
                   </div>
 
-                  {/* Campo: LINK DE AFILIADO */}
                   <div className="bg-[#f7f7f7] dark:bg-[#1a1a1a] rounded-[10px] p-[12px_14px] flex justify-between items-center">
                     <div className="flex-1 min-w-0 pr-4">
                       <label className="block text-[10px] font-bold uppercase text-[#999999] dark:text-[rgba(255,255,255,0.45)] mb-1">LINK DE AFILIADO:</label>
@@ -394,7 +401,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                     </div>
                   </div>
 
-                  {/* Campo: COPY DE VENDA */}
                   <div className="bg-[#f7f7f7] dark:bg-[#111111] border border-black/[0.05] dark:border-white/[0.05] rounded-[10px] p-3 flex justify-between items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <label className="block text-[10px] font-bold uppercase text-[#999999] dark:text-[rgba(255,255,255,0.4)] mb-2 tracking-wider">COPY DE VENDA:</label>
@@ -415,7 +421,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                     } />
                   </div>
 
-                  {/* Campo: IMAGEM */}
                   <div className="bg-[#f7f7f7] dark:bg-[#111111] border border-black/[0.05] dark:border-white/[0.05] rounded-[10px] p-[12px_14px] flex justify-between items-center">
                     <div className="flex-1">
                       <label className="block text-[10px] font-bold uppercase text-[#999999] dark:text-[rgba(255,255,255,0.45)] mb-1">IMAGEM:</label>
@@ -431,7 +436,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
                 </div>
               </div>
 
-              {/* 1. Lista de Grupos */}
               <div className="space-y-3">
                 <h3 className="text-gray-400 dark:text-white/45 text-[10px] uppercase font-bold tracking-widest px-1">GRUPOS ENCONTRADOS</h3>
                 <div className="space-y-3">
@@ -489,7 +493,6 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
         </AnimatePresence>
       </div>
 
-      {/* Modal de Seleção de Produto - Moved outside the main scroll container for stability */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -507,7 +510,7 @@ export default function FindGroup({ onNotification }: FindGroupProps) {
               className="relative w-full max-w-lg bg-white dark:bg-[#111111] border border-black/10 dark:border-white/[0.08] rounded-[24px] shadow-2xl overflow-hidden flex flex-col max-h-[80vh]"
             >
               <div className="px-6 py-5 border-b border-black/5 dark:border-white/[0.06] flex items-center justify-between">
-                <h3 className="text-base font-bold text-gray-900 dark:text-white">Selecionar Produto</h3>
+                <label className="text-sm font-bold text-gray-700 dark:text-white/70">Produto para Estrutura</label>
                 <button 
                   onClick={() => setIsModalOpen(false)}
                   className="w-8 h-8 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors text-gray-400"

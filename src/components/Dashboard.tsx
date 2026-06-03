@@ -4,9 +4,10 @@ import {
   Eye, 
   ShoppingCart, 
   Package,
-  ChevronRight,
   Menu,
-  Search,
+  LayoutDashboard,
+  TrendingUp,
+  Zap,
   Sparkles,
   X
 } from 'lucide-react';
@@ -19,7 +20,6 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import { CopyButton } from './ui/CopyButton';
 import { motion } from 'motion/react';
 import { products } from '../data/products';
 import { userStorage } from '../lib/storage';
@@ -42,7 +42,6 @@ const data = [
 export default function Dashboard() {
   const [showWelcome, setShowWelcome] = React.useState(true);
   const now = new Date();
-  const timestamp = `${now.toLocaleDateString('pt-BR')} ${now.toLocaleTimeString('pt-BR')} (GMT-03)`;
 
   const [salesTotal] = React.useState(() => userStorage.get('dashboard_sales') || '0,00');
   const [visitors] = React.useState(() => userStorage.get('metric_visitors') || '0');
@@ -50,24 +49,7 @@ export default function Dashboard() {
   const [orders] = React.useState(() => userStorage.get('metric_orders') || '0');
   const [units] = React.useState(() => userStorage.get('metric_units') || '0');
 
-  // Track changes for animation
-  const [lastUpdate, setLastUpdate] = React.useState<Record<string, number>>({});
-
-  const triggerAnimation = (key: string) => {
-    setLastUpdate(prev => ({ ...prev, [key]: Date.now() }));
-  };
-
-  // Listen for sales
-  React.useEffect(() => {
-    const handleSale = (e: any) => {
-      const { price } = e.detail;
-      
-      // Logic kept for event listeners
-    };
-
-    window.addEventListener('shopspy_sale', handleSale as EventListener);
-    return () => window.removeEventListener('shopspy_sale', handleSale as EventListener);
-  }, []);
+  const [lastUpdate] = React.useState<Record<string, number>>({});
 
   const top5Ids = JSON.parse(userStorage.get('top5_products') || '[11,12,13,14,15]');
   const showChart = localStorage.getItem('shopspy_show_chart') !== 'false';
@@ -111,245 +93,167 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Top Banner (Header area) */}
-      <header className="relative bg-[#D0011B] pt-12 pb-24 px-6 overflow-hidden">
-        {/* Background Watermark (Shopping Bag Icon mimic) */}
-        <div className="absolute top-0 right-0 w-[600px] h-full opacity-10 pointer-events-none select-none">
-          <div className="absolute top-[-100px] right-[-150px] w-[500px] h-[500px] border-[60px] border-white rounded-[80px] rotate-[15deg]"></div>
-          <div className="absolute top-[20px] right-[50px] w-[300px] h-[40px] bg-white rounded-full"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Top Nav (Mobile menu and User profile) */}
-          <div className="flex justify-between items-center mb-8">
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent('shopspy_toggle_sidebar'))}
-              className="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all duration-200"
-              aria-label="Abrir menu"
-            >
-              <Menu size={20} />
-            </button>
-            <div className="flex items-center gap-3 ml-auto cursor-pointer group invisible" title="Clique para sair">
-              {/* Profile removed */}
-            </div>
-          </div>
-
-          {/* Header Content */}
-          <div className="text-center text-white">
-            <div className="mb-4 flex justify-center">
-              <img 
-                src="https://i.postimg.cc/NfH1HDns/download-10-removebg-preview.png" 
-                alt="ShopSpy Logo" 
-                className="h-14 w-auto object-contain"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <h1 className="text-[32px] font-bold mb-3 tracking-tight">Vendas Hoje</h1>
-            
-            <div className="inline-block bg-white/20 dark:bg-black/20 px-4 py-1.5 rounded-[4px] text-[12px] font-medium mb-6">
-              {timestamp}
+      {/* Header Minimalista */}
+      <header className="px-6 pt-10 pb-6 border-b border-black/[0.05] dark:border-white/[0.05]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#D0011B] flex items-center justify-center shadow-lg shadow-[#D0011B]/20">
+                <LayoutDashboard className="text-white" size={24} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Dashboard</h1>
+                <p className="text-gray-500 dark:text-white/40 text-sm">Visão geral do seu desempenho</p>
+              </div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href="#" className="bg-white/15 hover:bg-white/20 border border-white/20 text-white px-5 py-2.5 rounded-[4px] text-[13px] font-bold transition-all no-underline">
-                Painel de Mineração
-              </a>
-              <a href="#" className="bg-white/15 hover:bg-white/20 border border-white/20 text-white px-5 py-2.5 rounded-[4px] text-[13px] font-bold transition-all no-underline flex items-center gap-1">
-                Ver Métricas Detalhadas &gt;
-              </a>
+            <div className="flex items-center gap-4">
+               <div className="bg-white dark:bg-[#111111] px-5 py-3 rounded-2xl border border-black/5 dark:border-white/10 shadow-sm flex items-center gap-3">
+                  <span className="text-gray-400 dark:text-white/40 text-sm font-medium">Vendas Hoje:</span>
+                  <span className="text-[#D0011B] text-xl font-bold">R$ {salesTotal}</span>
+               </div>
+               
+               <button
+                 onClick={() => window.dispatchEvent(new CustomEvent('shopspy_toggle_sidebar'))}
+                 className="md:hidden w-11 h-11 rounded-xl bg-white dark:bg-[#111111] border border-black/5 dark:border-white/10 flex items-center justify-center text-gray-900 dark:text-white"
+               >
+                 <Menu size={20} />
+               </button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-6 -mt-12 pb-20 relative z-20">
+      <main className="max-w-7xl mx-auto px-6 py-10 relative z-20">
         
-        {/* Floating Value Card  */}
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="bg-white dark:bg-[#111111] rounded-[12px] shadow-[0_4px_25px_rgba(0,0,0,0.08)] p-10 flex flex-col items-center justify-center mb-8 border border-black/5 dark:border-white/5"
-        >
-          <div className="flex items-center gap-2">
-            <span className="text-[20px] font-bold text-gray-400 dark:text-white/30 pt-4 self-start mt-2">R$</span>
-            <span 
-              key={lastUpdate.sales}
-              className={`text-[64px] font-bold text-[#D0011B] tracking-tight leading-tight ${lastUpdate.sales ? 'animate-value-flash' : ''}`}
-            >
-              {salesTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-            </span>
-          </div>
-        </motion.div>
+        {/* Metric Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <MetricCard 
+            icon={<Users size={20} className="text-[#D0011B]" />} 
+            label="Visitantes" 
+            value={visitors} 
+            color="#D0011B"
+          />
+          <MetricCard 
+            icon={<Eye size={20} className="text-[#2563EB]" />} 
+            label="Visualizações" 
+            value={views} 
+            color="#2563EB"
+          />
+          <MetricCard 
+            icon={<ShoppingCart size={20} className="text-[#16A34A]" />} 
+            label="Pedidos" 
+            value={orders} 
+            color="#16A34A"
+          />
+          <MetricCard 
+            icon={<Package size={20} className="text-[#D97706]" />} 
+            label="Unidades" 
+            value={units} 
+            color="#D97706"
+          />
+        </div>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Col 1: Métricas Principais */}
-          <section className="lg:col-span-4 flex flex-col bg-white dark:bg-[#111111] rounded-[4px] shadow-sm border border-black/[0.08] dark:border-white/5 overflow-hidden">
-            <div className="px-5 py-4 border-b border-black/[0.05] dark:border-white/5">
-              <h2 className="text-[16px] font-bold text-gray-800 dark:text-white/90">Métricas Principais</h2>
-            </div>
-            <div className="grid grid-cols-2 flex-grow">
-              <MetricItem icon={<Users size={22} className="text-[#999]" />} label="Visitantes" value={visitors.toLocaleString('pt-BR')} borderRight borderBottom animationKey={lastUpdate.visitors} />
-              <MetricItem icon={<Eye size={22} className="text-[#999]" />} label="Visualizações da Página" value={views.toLocaleString('pt-BR')} borderBottom animationKey={lastUpdate.views} />
-              <MetricItem icon={<ShoppingCart size={22} className="text-[#999]" />} label="Pedidos" value={orders.toLocaleString('pt-BR')} borderRight animationKey={lastUpdate.orders} />
-              <MetricItem icon={<Package size={22} className="text-[#999]" />} label="Unidades" value={units.toLocaleString('pt-BR')} animationKey={lastUpdate.units} />
-            </div>
-          </section>
-
-          {/* Col 2: Visão Geral de Vendas (Chart) */}
-          <section className={`hidden lg:flex lg:col-span-12 xl:col-span-5 bg-white dark:bg-[#111111] rounded-[4px] shadow-sm border border-black/[0.08] dark:border-white/5 overflow-hidden flex-col ${!showChart ? 'lg:hidden' : 'lg:flex'}`}>
-            <div className="px-5 py-4 border-b border-black/[0.05] dark:border-white/5">
-              <h2 className="text-[16px] font-bold text-gray-800 dark:text-white/90">Visão Geral de Vendas ({chartPeriod})</h2>
-            </div>
-            
-            <div className="p-5 flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-4 text-[12px] font-medium text-gray-500">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-0.5 bg-[#D0011B]"></span> Hoje
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-0.5 bg-[#2673DD]"></span> Ontem
-                  </div>
-                </div>
-                <div className="flex p-1 bg-gray-100 dark:bg-white/5 rounded-lg gap-1">
-                  <button className="px-3 py-1 text-[11px] font-bold rounded-md bg-white dark:bg-white/10 text-[#D0011B] shadow-sm transition-all">Hoje</button>
-                  <button className="px-3 py-1 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 dark:hover:text-white transition-all">7 Dias</button>
-                  <button className="px-3 py-1 text-[11px] font-bold rounded-md text-gray-500 hover:text-gray-700 dark:hover:text-white transition-all">30 Dias</button>
+          {/* Chart Section */}
+          {showChart && (
+            <section className="lg:col-span-8 bg-white dark:bg-[#111111] rounded-[24px] border border-black/[0.05] dark:border-white/[0.08] p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <TrendingUp size={18} className="text-[#D0011B]" />
+                  Desempenho de Vendas
+                </h2>
+                <div className="flex p-1 bg-gray-100 dark:bg-white/5 rounded-xl gap-1">
+                  <button className="px-4 py-1.5 text-[11px] font-bold rounded-lg bg-white dark:bg-white/10 text-[#D0011B] shadow-sm">{chartPeriod}</button>
+                  <button className="px-4 py-1.5 text-[11px] font-bold rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white">Relatório</button>
                 </div>
               </div>
 
-              <div className="h-[250px] mt-2">
+              <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={data} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-                    <XAxis 
-                      dataKey="time" 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fontSize: 11, fill: '#999' }} 
-                    />
-                    <YAxis 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fontSize: 11, fill: '#999' }} 
-                    />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.03)" />
+                    <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#999' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#999' }} />
                     <Tooltip 
                       contentStyle={{ 
-                        borderRadius: '8px', 
+                        borderRadius: '12px', 
                         border: 'none', 
-                        boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
-                        backgroundColor: '#fff' 
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                        backgroundColor: '#fff',
+                        fontFamily: 'Space Grotesk'
                       }}
                     />
                     <Area 
                       type="monotone" 
                       dataKey="value" 
                       stroke="#D0011B" 
-                      strokeWidth={2}
+                      strokeWidth={3}
                       fill="url(#dashboardColorValue)" 
                     />
                     <defs>
                       <linearGradient id="dashboardColorValue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#D0011B" stopOpacity={0.15}/>
+                        <stop offset="5%" stopColor="#D0011B" stopOpacity={0.1}/>
                         <stop offset="95%" stopColor="#D0011B" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
+            </section>
+          )}
 
-              <div className="text-[11px] text-gray-400 py-3 border-t border-black/[0.05] dark:border-white/5 mt-auto">
-                Os vendedores que usam os Anúncios da Shopee estão recebendo 65% mais pedidos em média. <a href="#" className="text-blue-500 hover:underline">Crie anúncios aqui !</a>
-              </div>
-            </div>
-          </section>
-
-          {/* Col 3: Top 5 Produtos */}
-          <section className={`lg:col-span-12 xl:col-span-3 bg-white dark:bg-[#111111] border border-gray-200 dark:border-white/[0.08] rounded-[14px] p-5 shadow-xl transition-colors ${!showChart ? 'lg:col-span-8' : ''}`}>
-            <h2 className="text-[16px] font-bold text-gray-900 dark:text-white">Top 5 dos Produtos à Venda</h2>
+          {/* Top Products Section */}
+          <section className={`${showChart ? 'lg:col-span-4' : 'lg:col-span-12'} bg-white dark:bg-[#111111] rounded-[24px] border border-black/[0.05] dark:border-white/[0.08] p-6 shadow-sm`}>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+              <Sparkles size={18} className="text-[#D0011B]" />
+              Top Ranking
+            </h2>
             
-            <div className="border-t border-gray-100 dark:border-white/[0.06] mt-3 pt-1">
-              <div className="flex flex-col">
-                {topProducts.map((product, index) => (
-                  <div 
-                    key={product.id} 
-                    className={`flex items-center gap-3 py-3 ${index !== topProducts.length - 1 ? 'border-b border-gray-100 dark:border-white/[0.05]' : ''}`}
-                  >
-                    {/* Ranking */}
-                    <span className="text-[14px] font-bold text-[#D0011B] w-5 flex-shrink-0">
-                      {index + 1}
-                    </span>
-                    
-                    {/* Imagem */}
-                    <img 
-                      src={product.imagem} 
-                      alt={product.nome}
-                      className="w-11 h-11 rounded-lg object-cover flex-shrink-0"
-                      referrerPolicy="no-referrer"
-                    />
-                    
-                    {/* Texto */}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-medium text-gray-900 dark:text-white truncate-2-lines leading-snug">
-                        {product.nome}
-                      </div>
-                      <div className="text-[11px] text-gray-500 dark:text-white/40 mt-0.5">
-                        {product.vendas} vendidos
-                      </div>
-                    </div>
-                    
-                    {/* Preço */}
-                    <div className="text-[13px] font-bold text-gray-900 dark:text-white shrink-0 ml-1">
-                      {product.preco}
-                    </div>
+            <div className="space-y-4">
+              {topProducts.map((product, index) => (
+                <div key={product.id} className="flex items-center gap-4 group">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-sm font-bold text-[#D0011B]">
+                    {index + 1}
                   </div>
-                ))}
-                
-                {products.length === 0 && (
-                  <div className="py-8 flex flex-col items-center justify-center text-center opacity-40">
-                    <div className="w-12 h-12 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-3 text-gray-400">
-                      <Package size={20} />
-                    </div>
-                    <p className="text-gray-500 text-[12px]">Nenhum dado disponível.</p>
+                  <img 
+                    src={product.imagem} 
+                    alt={product.nome}
+                    className="w-12 h-12 rounded-xl object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] font-bold text-gray-900 dark:text-white truncate">{product.nome}</p>
+                    <p className="text-[11px] text-gray-500 dark:text-white/40">{product.vendas} vendas</p>
                   </div>
-                )}
-              </div>
+                  <Zap size={14} className="text-[#D0011B] opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              ))}
             </div>
-
-            <style>{`
-              .truncate-2-lines {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-              }
-            `}</style>
           </section>
-
         </div>
       </main>
     </div>
   );
 }
 
-function MetricItem({ icon, label, value, borderRight, borderBottom, animationKey }: { icon: React.ReactNode, label: string, value: string, borderRight?: boolean, borderBottom?: boolean, animationKey?: number }) {
+function MetricCard({ icon, label, value, color }: { icon: React.ReactNode, label: string, value: string, color: string }) {
   return (
-    <div className={`p-6 flex flex-col items-center justify-center text-center transition-colors hover:bg-gray-50/80 dark:hover:bg-white/[0.01] ${borderRight ? 'border-r border-black/[0.05] dark:border-white/5' : ''} ${borderBottom ? 'border-b border-black/[0.05] dark:border-white/5' : ''}`}>
-      <div className="mb-2">
-        {icon}
+    <div className="bg-white dark:bg-[#111111] border border-black/[0.05] dark:border-white/[0.08] rounded-[24px] p-6 shadow-sm hover:scale-[1.02] transition-all duration-300">
+      <div className="flex items-center justify-between mb-4">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gray-50 dark:bg-white/[0.03]">
+          {icon}
+        </div>
+        <span className="text-[10px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-widest leading-tight">
+          Live
+        </span>
       </div>
-      <span className="text-[11px] font-bold text-gray-400 dark:text-white/30 uppercase tracking-wide mb-1 leading-tight">
-        {label}
-      </span>
-      <span 
-        key={animationKey}
-        className={`text-[22px] font-bold text-gray-800 dark:text-white ${animationKey ? 'animate-value-flash' : ''}`}
-      >
-        {value}
-      </span>
+      <div>
+        <p className="text-gray-500 dark:text-white/40 text-[12px] font-medium mb-1">{label}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{value}</p>
+      </div>
     </div>
   );
 }

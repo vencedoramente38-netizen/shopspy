@@ -5,6 +5,7 @@ import {
   Settings, 
   ChevronLeft, 
   ChevronRight,
+  Plus,
   LogOut,
   Users,
   Gift,
@@ -61,42 +62,50 @@ export default function Sidebar({ isExpanded, setIsExpanded, activeItem, onItemC
       <div className="h-20 flex items-center px-4 overflow-hidden border-b border-black/[0.03] dark:border-white/[0.03]">
         <div className={`flex items-center ${isExpanded ? 'justify-start gap-3 translate-x-1' : 'justify-center'} w-full transition-all duration-300`}>
           <img 
-            src="https://i.postimg.cc/NfH1HDns/download-10-removebg-preview.png" 
+            src="https://i.postimg.cc/NFkJ8vX6/edd68b75-b6bf-4dcd-af88-7dd1332566ed.png" 
             alt="ShopSpy Logo" 
             className="h-10 w-auto object-contain shrink-0 transition-transform duration-300"
             referrerPolicy="no-referrer"
           />
-          {isExpanded && (
-            <motion.span 
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-xl font-bold text-gray-900 dark:text-white font-['Space Grotesk'] whitespace-nowrap"
-            >
-              ShopSpy
-            </motion.span>
-          )}
+          {/* ShopSpy name removed as per request */}
         </div>
       </div>
 
       <nav className="flex-1 py-4 px-2 space-y-1">
-        {menuItems.map((item) => {
+        {menuItems.sort((a, b) => a.id === 'find-group' ? -1 : (b.id === 'find-group' ? 1 : 0)).map((item) => {
           const isActive = activeItem === item.id;
+          const isFindGroup = item.id === 'find-group';
+          const Icon = isFindGroup ? Plus : item.icon;
+          
           return (
             <div
               key={item.id}
               onClick={() => {
                 onItemClick(item.id);
               }}
+              style={isFindGroup ? {
+                background: 'linear-gradient(135deg, #D0011B, #ff4444)',
+                color: 'white',
+                boxShadow: '0 4px 15px rgba(208,1,27,0.4)',
+                borderRadius: '10px',
+                padding: '12px 16px',
+                marginBottom: '8px'
+              } : undefined}
               className={`
                 flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200
-                ${isActive 
+                ${isActive && !isFindGroup 
                   ? 'bg-[#D0011B] text-white font-bold' 
-                  : 'text-gray-500 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-white/90'}
+                  : (!isFindGroup ? 'text-gray-500 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/[0.04] hover:text-gray-900 dark:hover:text-white/90' : 'font-bold')}
                 ${(!isExpanded && (typeof window !== 'undefined' && window.innerWidth >= 768)) && 'justify-center p-3'}
+                ${isFindGroup ? 'hover:scale-[1.02] active:scale-[0.98]' : ''}
               `}
             >
-              <item.icon size={22} />
-              {(isExpanded || (typeof window !== 'undefined' && window.innerWidth < 768)) && <span className="text-sm truncate">{item.label}</span>}
+              <Icon size={22} className={isFindGroup ? 'text-white' : ''} />
+              {(isExpanded || (typeof window !== 'undefined' && window.innerWidth < 768)) && (
+                <span className="text-sm truncate">
+                  {isFindGroup ? '+ Nova Estrutura' : item.label}
+                </span>
+              )}
             </div>
           );
         })}

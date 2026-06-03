@@ -35,6 +35,21 @@ import { GlowingEffect } from './ui/glowing-effect';
 import { WavyBackground } from './ui/wavy-background';
 import { Button as NeonButton } from './ui/neon-button';
 import { FlipWords } from './ui/flip-words';
+import { 
+  Navbar, 
+  NavBody, 
+  NavItems, 
+  NavbarLogo, 
+  NavbarButton,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu
+} from './ui/resizable-navbar';
+import FeaturedSectionStats from './ui/featured-section-stats';
+import { TestimonialsColumn } from './ui/testimonials-columns-1';
+import PricingSection from './ui/pricing-section';
+import Footer4Col from './ui/footer-column';
 
 function HeaderScroll({ 
   translate, 
@@ -194,75 +209,49 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
     <div className="bg-white min-h-screen text-[#111111] selection:bg-[#D0011B]/30 scroll-smooth" style={{ fontFamily: '"Space Grotesk", "Space Grotesk Fallback", ui-sans-serif, system-ui, sans-serif' }}>
       
       {/* SECTION 1: NAVBAR */}
-      <motion.nav 
-        initial={false}
-        animate={{ 
-          scale: scrolled ? 1 : 1,
-          y: scrolled ? 10 : 0,
-          width: scrolled ? 'calc(100% - 32px)' : 'calc(100% - 48px)',
-          backgroundColor: scrolled ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-          borderColor: scrolled ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-        }}
-        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 w-full max-w-[950px] z-[100] backdrop-blur-md border rounded-[20px] px-4 sm:px-6 py-3 flex items-center justify-between shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
-      >
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <img 
-              src="https://i.postimg.cc/NfH1HDns/download-10-removebg-preview.png" 
-              alt="ShopSpy Logo" 
-              className={`h-8 sm:h-12 w-auto object-contain transition-all duration-300 ${scrolled ? 'brightness-200' : ''}`}
-              referrerPolicy="no-referrer"
-            />
-        </div>
+      <Navbar>
+        <NavBody>
+          <NavbarLogo />
+          <NavItems
+            items={[
+              { name: "Como funciona", link: "#como-funciona" },
+              { name: "Recursos", link: "#recursos" },
+              { name: "Preços", link: "#pricing" },
+              { name: "FAQ", link: "#faq" },
+            ]}
+          />
+          <NavbarButton onClick={onEnterLogin}>Acessar Plataforma</NavbarButton>
+        </NavBody>
 
-        <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <a href="#como-funciona" className={`text-[13px] xl:text-[14px] transition-colors whitespace-nowrap font-medium ${scrolled ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'}`}>Como funciona</a>
-            <a href="#recursos" className={`text-[13px] xl:text-[14px] transition-colors whitespace-nowrap font-medium ${scrolled ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'}`}>Recursos</a>
-            <a href="#precos" className={`text-[13px] xl:text-[14px] transition-colors whitespace-nowrap font-medium ${scrolled ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'}`}>Preços</a>
-            <a href="#faq" className={`text-[13px] xl:text-[14px] transition-colors whitespace-nowrap font-medium ${scrolled ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black'}`}>FAQ</a>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center gap-2 sm:gap-4">
-            <NeonButton 
-              onClick={onEnterLogin}
-              variant="solid"
-              className="px-4 sm:px-6 py-2 rounded-full text-[13px] sm:text-[14px] font-bold"
-            >
-              Entrar
-            </NeonButton>
-          </div>
-        </div>
-
-        {/* Mobile menu overlay */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 w-full mt-2 bg-white/95 backdrop-blur-2xl border border-black/10 rounded-3xl p-6 flex flex-col gap-6 lg:hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
-            >
-              <div className="flex flex-col gap-4 text-center">
-                <a href="#como-funciona" onClick={() => setIsMenuOpen(false)} className="text-[16px] text-black/70 hover:text-black py-2 border-b border-black/5">Como funciona</a>
-                <a href="#recursos" onClick={() => setIsMenuOpen(false)} className="text-[16px] text-black/70 hover:text-black py-2 border-b border-black/5">Recursos</a>
-                <a href="#precos" onClick={() => setIsMenuOpen(false)} className="text-[16px] text-black/70 hover:text-black py-2 border-b border-black/5">Preços</a>
-                <a href="#faq" onClick={() => setIsMenuOpen(false)} className="text-[16px] text-black/70 hover:text-black py-2">FAQ</a>
-              </div>
-              <button 
-                onClick={() => {
-                  onEnterLogin();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full bg-[#D0011B] text-white py-4 rounded-2xl font-bold text-base shadow-[0_8px_20px_rgba(208,1,27,0.3)]"
-              >
-                Entrar
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+        <MobileNav>
+          {(visible) => {
+            const [localIsMenuOpen, setLocalIsMenuOpen] = useState(false);
+            return (
+              <>
+                <MobileNavHeader>
+                  <NavbarLogo />
+                  <MobileNavToggle
+                    isOpen={localIsMenuOpen}
+                    onClick={() => setLocalIsMenuOpen(!localIsMenuOpen)}
+                  />
+                </MobileNavHeader>
+                <MobileNavMenu
+                  isOpen={localIsMenuOpen}
+                  onClose={() => setLocalIsMenuOpen(false)}
+                >
+                  <div className="flex flex-col gap-6 w-full">
+                    <a href="#como-funciona" onClick={() => setLocalIsMenuOpen(false)} className="text-white/70 hover:text-white text-lg font-bold">Como funciona</a>
+                    <a href="#recursos" onClick={() => setLocalIsMenuOpen(false)} className="text-white/70 hover:text-white text-lg font-bold">Recursos</a>
+                    <a href="#pricing" onClick={() => setLocalIsMenuOpen(false)} className="text-white/70 hover:text-white text-lg font-bold">Preços</a>
+                    <a href="#faq" onClick={() => setLocalIsMenuOpen(false)} className="text-white/70 hover:text-white text-lg font-bold">FAQ</a>
+                    <NavbarButton onClick={onEnterLogin} className="w-full py-4 text-lg">Entrar</NavbarButton>
+                  </div>
+                </MobileNavMenu>
+              </>
+            );
+          }}
+        </MobileNav>
+      </Navbar>
 
       {/* SECTION 2: HERO */}
       <header className="relative pt-32 sm:pt-48 pb-20 px-6 max-w-[800px] mx-auto text-center overflow-hidden bg-white">
@@ -374,85 +363,33 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse,rgba(208,1,27,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
         
         <div className="relative z-10">
+          <FeaturedSectionStats />
+          
           <ContainerScroll
             titleComponent={
               <div className="max-w-4xl mx-auto px-4">
                 <h2 className="text-[32px] md:text-[60px] font-black text-white leading-tight">
-                  O Jeito Mais Rápido de <br />
-                  <span className="text-[#D0011B]">Lucrar na Shopee.</span>
+                  Tudo que você precisa em <br />
+                  <span className="text-[#D0011B]">um único lugar.</span>
                 </h2>
               </div>
             }
           >
             <img
-              src="https://i.postimg.cc/0r1RyZzC/image.png"
+              src="https://i.postimg.cc/ZnB7C5zf/Captura-de-tela-2026-06-02-185948.png"
               alt="ShopSpy App Interface"
-              className="hidden md:block mx-auto rounded-2xl object-cover h-full object-left-top shadow-2xl"
+              className="hidden md:block mx-auto rounded-2xl object-cover w-full h-full bg-[#111111]/80 backdrop-blur-xl shadow-2xl border border-white/10"
               draggable={false}
               referrerPolicy="no-referrer"
             />
             <img
-              src="https://i.postimg.cc/MTjzZn9d/image.png"
+              src="https://i.postimg.cc/ZnB7C5zf/Captura-de-tela-2026-06-02-185948.png"
               alt="ShopSpy App Interface Mobile"
-              className="md:hidden mx-auto rounded-2xl object-cover h-full object-left-top shadow-2xl"
+              className="md:hidden mx-auto rounded-2xl object-cover w-full h-full bg-[#111111]/80 backdrop-blur-xl shadow-2xl border border-white/10"
               draggable={false}
               referrerPolicy="no-referrer"
             />
           </ContainerScroll>
-
-          {/* STATS */}
-          <div className="px-6 mb-24 mt-12">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="max-w-[800px] mx-auto bg-[#111111] border border-white/[0.08] rounded-[32px] p-8 sm:p-14 shadow-2xl relative overflow-hidden"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-6 text-center">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <div className="text-[48px] sm:text-[56px] font-black text-[#D0011B] leading-none mb-2">+20</div>
-                  <div className="text-[14px] text-white/50 uppercase font-black tracking-widest leading-tight">Produtos Virais Atualizados</div>
-                </motion.div>
-                
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="border-y sm:border-y-0 sm:border-x border-white/5 py-8 sm:py-0"
-                >
-                  <div className="text-[48px] sm:text-[56px] font-black text-[#D0011B] leading-none mb-2">+5</div>
-                  <div className="text-[14px] text-white/50 uppercase font-black tracking-widest leading-tight">Categorias Disponíveis</div>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <div className="text-[48px] sm:text-[56px] font-black text-[#D0011B] leading-none mb-2">100%</div>
-                  <div className="text-[14px] text-white/50 uppercase font-black tracking-widest leading-tight">Gratuito para Usar</div>
-                </motion.div>
-              </div>
-              
-              <NeonButton 
-                onClick={() => {
-                  document.getElementById('secao-precos')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                variant="solid"
-                className="mt-12 mx-auto px-10 py-4 font-black flex items-center justify-center gap-2 rounded-xl shadow-lg shadow-[#D0011B]/20"
-              >
-                Acessar Agora <ArrowRight size={18} />
-              </NeonButton>
-            </motion.div>
-          </div>
         </div>
       </section>
 
@@ -555,22 +492,15 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="px-6 py-24 bg-[#0a0a0a] relative overflow-hidden"
-        style={{ 
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}
+        className="px-6 py-24 bg-white relative overflow-hidden"
       >
-        {/* Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse,rgba(208,1,27,0.06)_0%,transparent_70%)] pointer-events-none z-0" />
-        
         <div className="max-w-[1200px] mx-auto relative z-10">
           <div className="text-center mb-16">
              <motion.span 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-block border border-white/15 rounded-full px-4 py-1 text-[11px] font-bold text-white/60 mb-6 tracking-[0.2em] uppercase"
+              className="inline-block border border-black/10 rounded-full px-4 py-1 text-[11px] font-bold text-black/60 mb-6 tracking-[0.2em] uppercase bg-black/5"
             >
               RECURSOS
             </motion.span>
@@ -579,7 +509,7 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-[32px] sm:text-[48px] font-black text-white"
+              className="text-[32px] sm:text-[48px] font-black text-[#111111] uppercase italic"
             >
               Tudo que você precisa para vender.
             </motion.h2>
@@ -625,24 +555,17 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
               }
             ].map((feature, idx) => (
               <li key={idx} className={`min-h-[16rem] list-none ${feature.area}`}>
-                <div className="group relative h-full rounded-[24px] border border-white/10 p-1 overflow-hidden bg-white/5">
-                  <GlowingEffect
-                    spread={40}
-                    glow={true}
-                    disabled={false}
-                    proximity={64}
-                    inactiveZone={0.01}
-                  />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-[20px] p-6 shadow-[0px_0px_27px_0px_rgba(0,0,0,0.2)]">
+                <div className="group relative h-full rounded-[24px] border border-black/5 p-1 overflow-hidden bg-[#f9f9f9]">
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-[20px] p-6 shadow-sm group-hover:shadow-xl transition-all duration-300">
                     <div className="relative flex flex-1 flex-col justify-between gap-4">
-                      <div className="w-fit rounded-lg border border-white/10 p-2 text-[#D0011B] bg-white/5 shrink-0">
+                      <div className="w-fit rounded-lg border border-black/5 p-2 text-[#D0011B] bg-white shrink-0 shadow-sm transition-transform group-hover:scale-110">
                         {feature.icon}
                       </div>
                       <div className="space-y-2">
-                        <h3 className="font-bold text-xl text-white leading-tight">
+                        <h3 className="font-bold text-xl text-[#111111] leading-tight group-hover:text-[#D0011B] transition-colors">
                           {feature.title}
                         </h3>
-                        <p className="text-sm text-white/50 leading-relaxed font-medium">
+                        <p className="text-sm text-[#555555] leading-relaxed font-medium">
                           {feature.desc}
                         </p>
                       </div>
@@ -655,6 +578,85 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
         </div>
       </motion.section>
 
+      {/* SECTION 5.5: TESTEMUNHOS (BLACK) */}
+      <section className="px-6 py-24 bg-[#0a0a0a] overflow-hidden border-t border-white/5">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+          <div className="flex-1 text-left">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block border border-white/15 rounded-full px-4 py-1 text-[11px] font-bold text-white/60 mb-6 tracking-[0.2em] uppercase"
+            >
+              DEPOIMENTOS
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-[40px] sm:text-[56px] font-black text-white leading-tight uppercase italic mb-8"
+            >
+              Quem usa <br />
+              <span className="text-[#D0011B]">ShopSpy, recomenda.</span>
+            </motion.h2>
+            <p className="text-white/40 text-lg font-medium max-w-md">
+              Junte-se a centenas de afiliados que transformaram sua forma de minerar produtos e estão escalando resultados todos os dias.
+            </p>
+          </div>
+
+          <div className="flex-1 flex gap-6 h-[600px] overflow-hidden">
+            <TestimonialsColumn
+              duration={20}
+              className="flex-1"
+              testimonials={[
+                {
+                  text: "Em menos de 2 dias usando o ShopSpy, já fiz minha primeira venda. O radar de produtos é surreal.",
+                  image: "https://i.pravatar.cc/150?u=lucas",
+                  name: "Lucas Oliveira",
+                  role: "Afiliado Iniciante",
+                },
+                {
+                  text: "A ferramenta de 'Nova Estrutura' economiza horas do meu dia. Gerar a copy é o diferencial.",
+                  image: "https://i.pravatar.cc/150?u=mariana",
+                  name: "Mariana Costa",
+                  role: "Afiliado Pro",
+                },
+                {
+                  text: "Uso para monitorar a concorrência e ver o que está viralizando. ShopSpy é indispensável.",
+                  image: "https://i.pravatar.cc/150?u=ricardo",
+                  name: "Ricardo Santos",
+                  role: "Vendedor Shopee",
+                },
+              ]}
+            />
+            <TestimonialsColumn
+              duration={15}
+              className="flex-1 hidden sm:block"
+              testimonials={[
+                {
+                  text: "Melhor suporte que já tive. Eles realmente ajudam você a vender mais.",
+                  image: "https://i.pravatar.cc/150?u=julia",
+                  name: "Julia Mello",
+                  role: "Influencer",
+                },
+                {
+                  text: "Nunca foi tão fácil minerar produtos. Consigo focar no que importa agora.",
+                  image: "https://i.pravatar.cc/150?u=pedro",
+                  name: "Pedro Alves",
+                  role: "E-commerce Owner",
+                },
+                {
+                  text: "Transformou minha renda extra em minha fonte principal de ganhos.",
+                  image: "https://i.pravatar.cc/150?u=ana",
+                  name: "Ana Silveira",
+                  role: "Afiliada de Sucesso",
+                },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* WAVE: BLACK TO WHITE */}
       <div style={{ background: '#0a0a0a', lineHeight: 0 }}>
         <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%' }}>
@@ -662,194 +664,8 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
         </svg>
       </div>
 
-      {/* SECTION 6: PREÇOS (WHITE) */}
-      <section id="secao-precos" className="px-6 py-32 max-w-[1200px] mx-auto bg-white font-['Space Grotesk']">
-        <div className="text-center mb-20">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block border border-[#D0011B]/20 rounded-full px-4 py-1 text-[11px] font-bold text-[#D0011B] mb-6 tracking-[0.2em] uppercase bg-[#D0011B]/5"
-          >
-            INVESTIMENTO
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-[32px] sm:text-[48px] font-black text-[#111111] leading-tight"
-          >
-            Quanto vale encontrar o produto certo?
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-[28px] sm:text-[40px] font-black text-[#D0011B] leading-none"
-          >
-            e lucrar todos os dias?
-          </motion.p>
-        </div>
-
-        <div className="max-w-4xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-20">
-          
-          {/* Plano Mensal */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            whileHover={{ y: -10, transition: { duration: 0.3 } }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="border border-black/[0.05] bg-[#f9f9f9] rounded-[40px] px-8 py-12 flex flex-col h-full shadow-lg"
-          >
-            <div className="mb-10 text-left">
-              <h2 className="text-3xl font-bold mb-3 text-[#111111]">Plano Mensal</h2>
-              <p className="text-[#555555] text-sm leading-relaxed font-medium">Ideal para testar a plataforma e começar a vender</p>
-            </div>
-
-            <div className="flex items-baseline mb-12">
-              <span className="text-lg font-bold mr-1 text-[#D0011B]">R$</span>
-              <span className="text-6xl font-black tracking-tight text-[#D0011B]">97</span>
-              <span className="text-[#555555] text-lg ml-2 font-bold">/mês</span>
-            </div>
-
-            <motion.button 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => window.open('https://ggcheckout.app/checkout/v3/wPmdkoLh4QAWSIoHjAVD', '_blank')}
-              className="w-full py-4 rounded-2xl font-black text-md mb-12 bg-white border border-black/10 text-black shadow-sm transition-all duration-300"
-            >
-              Assinar Plano Mensal
-            </motion.button>
-
-            <div className="flex flex-col gap-5">
-              <p className="text-[10px] font-black tracking-[0.2em] text-[#555555] uppercase text-left">RECURSOS</p>
-              <p className="text-[#D0011B] font-bold text-base text-left">Recursos incluídos:</p>
-              
-              <ul className="space-y-4">
-                {[
-                  "Radar de Produtos",
-                  "Produtos Virais com Score",
-                  "Copy de Venda Pronta",
-                  "Grupos do Facebook",
-                  "Projeção de Lucro",
-                  "Favoritos",
-                  "Calculadora de Comissão"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start text-[14px] text-[#555555] text-left font-medium">
-                    <span className="mr-3 flex items-center justify-center w-5 h-5 rounded-full border border-[#D0011B]/40 text-[#D0011B] flex-shrink-0 mt-0.5">
-                      <Check size={12} strokeWidth={3} />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Plano Vitalício */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            whileHover={{ y: -10, transition: { duration: 0.3 } }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="border border-[#D0011B]/30 bg-white rounded-[40px] px-8 py-12 flex flex-col h-full relative overflow-hidden shadow-2xl"
-          >
-            {/* Badge Popular */}
-            <div className="absolute top-8 right-8">
-              <span className="bg-[#D0011B] shadow-[0_10px_30px_-5px_rgba(208,1,27,0.4)] text-[10px] uppercase font-black px-3 py-1.5 rounded-full tracking-wide text-white">
-                Popular
-              </span>
-            </div>
-
-            <div className="mb-10 text-left">
-              <h2 className="text-3xl font-bold mb-3 text-[#111111]">Plano Vitalício</h2>
-              <p className="text-[#555555] text-sm leading-relaxed font-medium">Pague uma vez, use para sempre com todas as atualizações</p>
-            </div>
-
-            <div className="flex flex-col mb-4 text-left">
-              <div className="flex items-baseline">
-                <span className="text-lg font-bold mr-1 text-[#D0011B]">R$</span>
-                <span className="text-6xl font-black tracking-tight text-[#D0011B]">147</span>
-              </div>
-              <p className="text-[#D0011B] text-sm font-black mt-4">à vista com acesso vitalício</p>
-            </div>
-
-            <motion.button 
-              whileHover={{ opacity: 0.9, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => window.open('https://ggcheckout.app/checkout/v3/WQ583Zqro94TV375rMYX', '_blank')}
-              className="w-full py-4 rounded-2xl font-black text-md flex items-center justify-center gap-2 mb-12 bg-[#D0011B] shadow-[0_10px_30px_-5px_rgba(208,1,27,0.4)] text-white transition-all duration-300"
-            >
-              <Zap size={16} fill="white" />
-              Comprar Acesso Vitalício
-            </motion.button>
-
-            <div className="flex flex-col gap-5">
-              <p className="text-[10px] font-black tracking-[0.2em] text-[#555555] uppercase text-left">RECURSOS</p>
-              <p className="text-[#D0011B] font-bold text-base text-left">Tudo do Mensal, mais:</p>
-              
-              <ul className="space-y-4">
-                {[
-                  { text: "Radar de Produtos", bold: false },
-                  { text: "Produtos Virais com Score", bold: false },
-                  { text: "Copy de Venda Pronta", bold: false },
-                  { text: "Grupos do Facebook", bold: false },
-                  { text: "Projeção de Lucro", bold: false },
-                  { text: "Favoritos", bold: false },
-                  { text: "Novos Produtos Toda Semana", bold: true },
-                  { text: "Atualizações Vitalícias", bold: true }
-                ].map((item, i) => (
-                  <li key={i} className={`flex items-start text-[14px] text-[#555555] text-left font-medium ${item.bold ? 'font-bold text-[#111111]' : ''}`}>
-                    <span className="mr-3 flex items-center justify-center w-5 h-5 rounded-full border border-[#D0011B]/40 text-[#D0011B] flex-shrink-0 mt-0.5">
-                      <Check size={12} strokeWidth={3} />
-                    </span>
-                    {item.text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Card de urgência */}
-        <motion.div 
-           initial={{ opacity: 0, y: 30 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="max-w-[700px] mx-auto bg-[#f9f9f9] border border-black/[0.05] rounded-3xl p-8 flex flex-col sm:flex-row items-center gap-8 shadow-xl"
-        >
-           <div className="w-14 h-14 bg-[#D0011B]/10 rounded-full flex items-center justify-center shrink-0">
-              <AlertTriangle size={28} className="text-[#D0011B]" />
-           </div>
-           <div className="flex-1 text-center sm:text-left">
-              <p className="text-[#111111] text-xl font-bold mb-3">Vagas limitadas</p>
-              <div className="w-full h-2.5 bg-black/10 rounded-full overflow-hidden mb-3">
-                 <motion.div 
-                   initial={{ width: 0 }}
-                   whileInView={{ width: '85%' }}
-                   transition={{ duration: 1, ease: "easeOut" }}
-                   className="h-full bg-[#D0011B]" 
-                 />
-              </div>
-              <div className="flex justify-between text-[12px] font-black">
-                <span className="text-[#111111]">Restam apenas 15 acessos disponíveis.</span>
-                <span className="text-[#555555] uppercase tracking-widest">Atualizado em tempo real</span>
-              </div>
-           </div>
-        </motion.div>
-      </section>
-
-      {/* WAVE: WHITE TO BLACK */}
-      <div style={{ background: '#ffffff', lineHeight: 0 }}>
-        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%' }}>
-          <path d="M0,0 C360,80 1080,80 1440,0 L1440,80 L0,80 Z" fill="#0a0a0a"/>
-        </svg>
-      </div>
-
+      <PricingSection />
+      
       {/* SECTION 7: FAQ (BLACK) */}
       <motion.section 
         id="faq" 
@@ -868,7 +684,7 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
 
         <div className="max-w-[800px] mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-[32px] sm:text-[48px] font-black text-white mb-4">Perguntas Frequentes</h2>
+            <h2 className="text-[32px] sm:text-[48px] font-black text-white mb-4 uppercase italic">Perguntas Frequentes</h2>
             <p className="text-white/50 font-medium">Tire suas dúvidas sobre o ShopSpy.</p>
           </div>
 
@@ -951,7 +767,7 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
             <div className="h-20 w-20 bg-[#D0011B]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Zap size={40} className="text-[#D0011B]" fill="#D0011B" />
             </div>
-            <h2 className="text-[32px] sm:text-[56px] font-black leading-tight mb-6 text-[#111111]">
+            <h2 className="text-[32px] sm:text-[56px] font-black leading-tight mb-6 text-[#111111] uppercase italic">
               Pronto para <span className="text-[#D0011B]">Explodir suas Vendas?</span>
             </h2>
             <p className="text-[#555555] text-lg sm:text-xl font-medium max-w-[500px] mx-auto mb-10">
@@ -959,7 +775,7 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
             </p>
             <NeonButton 
               onClick={() => {
-                document.getElementById('secao-precos')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
               }}
               variant="solid"
               className="px-12 py-5 text-lg font-black rounded-2xl shadow-xl shadow-[#D0011B]/20 inline-flex items-center gap-3"
@@ -970,30 +786,7 @@ export default function LandingPage({ onEnterLogin }: LandingPageProps) {
         </div>
       </section>
 
-      {/* FOOTER (BLACK) */}
-      <footer className="bg-[#0a0a0a] text-white/40 py-16 px-6 font-medium relative border-t border-white/[0.05]"
-        style={{ 
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}>
-        <div className="max-w-[1200px] mx-auto flex flex-col items-center">
-          <img 
-            src="https://i.postimg.cc/NfH1HDns/download-10-removebg-preview.png" 
-            alt="ShopSpy Logo" 
-            className="h-12 w-auto mb-8 opacity-80"
-            referrerPolicy="no-referrer"
-          />
-          <div className="flex flex-wrap justify-center gap-8 mb-12">
-            <a href="#como-funciona" className="hover:text-white transition-colors">Como funciona</a>
-            <a href="#recursos" className="hover:text-white transition-colors">Recursos</a>
-            <a href="#precos" className="hover:text-white transition-colors">Preços</a>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
-            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-            <a href="#" className="hover:text-white transition-colors">Termos</a>
-          </div>
-          <p className="text-[13px] text-center mb-4">© 2026 ShopSpy. Todos os direitos reservados. Não temos vínculo oficial com a Shopee.</p>
-        </div>
-      </footer>
+      <Footer4Col />
 
       {/* Scroll Blur Effect Elements */}
       <div className="scroll-blur-overlay" />
