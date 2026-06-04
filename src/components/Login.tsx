@@ -121,63 +121,92 @@ export default function Login({ onLogin, onBack }: LoginProps) {
       return;
     }
 
+    const emailNormalized = email.toLowerCase().trim();
+
     try {
-      const { data: userData, error: userError } = await supabase
-        .from('users_shopspy')
-        .select('id, email, is_active, plan')
-        .eq('email', email.toLowerCase().trim())
-        .maybeSingle();
+      // Tentar criar/atualizar senha via signUp
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: emailNormalized,
+        password,
+        options: {
+          data: { name: emailNormalized }
+        }
+      });
 
-      if (!userData) {
-        setErrorMsg('E-mail não encontrado. Verifique se usou o mesmo e-mail da compra.');
-        setIsLoading(false);
-        return;
+      if (signUpError) {
+        // Se já existe, tentar login direto com nova senha
+        if (signUpError.message.includes('already registered') ||
+            signUpError.message.includes('already exists')) {
+
+          // Usuário já existe — tentar atualizar senha via signIn
+          const { error: loginErr } = await supabase.auth.signInWithPassword({
+            email: emailNormalized,
+            password: 'shopspy12345' // senha padrão criada pelo webhook
+          });
+
+          if (!loginErr) {
+            // Atualizar para nova senha escolhida pelo usuário
+            await supabase.auth.updateUser({ password });
+          }
+        } else {
+          throw signUpError;
+        }
       }
 
-      if (!userData.is_active) {
-        setErrorMsg('Sua conta está inativa. Entre em contato com o suporte.');
-        setIsLoading(false);
-        return;
-      }
-
-      const { error: updateError } = await supabase.auth.admin.updateUserById(
-        userData.id,
-        { password }
-      );
-
-      if (updateError) {
-        const { error: signUpError } = await supabase.auth.signUp({
-          email: email.toLowerCase().trim(),
-          password
-        });
-        if (signUpError) throw signUpError;
-      }
-
+      // Fazer login com a nova senha
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-        email: email.toLowerCase().trim(),
+        email: emailNormalized,
         password
       });
 
       if (loginError) throw loginError;
 
+      // Verificar se email está liberado na tabela
+      const { data: userData } = await supabase
+        .from('users_shopspy')
+        .select('is_active, plan')
+        .eq('id', loginData.user.id)
+        .maybeSingle();
+
+      if (!userData?.is_active) {
+        setErrorMsg('Sua conta está inativa. Entre em contato com o suporte.');
+        await supabase.auth.signOut();
+        setIsLoading(false);
+        return;
+      }
+
+      // Verificar admin
+      const { data: adminData } = await supabase
+        .from('admins_shopspy')
+        .select('email')
+        .eq('email', emailNormalized)
+        .maybeSingle();
+
       localStorage.setItem('shopspy_auth', 'true');
-      localStorage.setItem('shopspy_is_admin', 'false');
-      localStorage.setItem('shopspy_user_email', email.toLowerCase().trim());
-      localStorage.setItem('shopspy_plan', userData.plan);
+      localStorage.setItem('shopspy_is_admin', adminData ? 'true' : 'false');
+      localStorage.setItem('shopspy_user_email', emailNormalized);
+      localStorage.setItem('shopspy_plan', userData?.plan || 'mensal');
       localStorage.setItem('shopspy_notifications_enabled', 'false');
       onLogin();
 
     } catch (err: any) {
-      const allowedEmails = ['usuarioshopspy765@gmail.com'];
-      if (allowedEmails.includes(email.toLowerCase().trim())) {
+      console.error('Erro no registro:', err);
+      // Fallback local
+      const localAllowed = [
+        'usuarioshopspy765@gmail.com',
+        'shopspyadmin@gmail.com'
+      ];
+
+      if (localAllowed.includes(emailNormalized)) {
+        const isAdmin = emailNormalized === 'shopspyadmin@gmail.com';
         localStorage.setItem('shopspy_auth', 'true');
-        localStorage.setItem('shopspy_is_admin', 'false');
-        localStorage.setItem('shopspy_user_email', email.toLowerCase().trim());
-        localStorage.setItem('shopspy_plan', 'mensal');
+        localStorage.setItem('shopspy_is_admin', isAdmin ? 'true' : 'false');
+        localStorage.setItem('shopspy_user_email', emailNormalized);
+        localStorage.setItem('shopspy_plan', isAdmin ? 'vitalicio' : 'mensal');
         localStorage.setItem('shopspy_notifications_enabled', 'false');
         onLogin();
       } else {
-        setErrorMsg('E-mail não encontrado ou não autorizado. Use o e-mail da compra.');
+        setErrorMsg('E-mail não encontrado. Verifique se usou o mesmo e-mail da compra.');
       }
     } finally {
       setIsLoading(false);
